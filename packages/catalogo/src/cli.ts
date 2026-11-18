@@ -15,5 +15,6 @@ mkdirSync(dirname(resolve(salida)), { recursive: true });
 writeFileSync(resolve(salida), JSON.stringify(catalogo, null, 2) + "\n");
 console.log(
   `Catálogo ${catalogo.version}: ${catalogo.dominios.length} dominios, ${catalogo.logros.length} logros, ` +
-    `${catalogo.cuestionarios.length} cuestionarios, ${catalogo.items.length} items → ${salida}`,
+    `${catalogo.cuestionarios.length} cuestionarios, ${catalogo.items.length} items, ` +
+    `${catalogo.biblioteca.length} entradas de biblioteca → ${salida}`,
 );

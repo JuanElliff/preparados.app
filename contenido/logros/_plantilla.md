@@ -12,7 +12,6 @@ itemsRequeridos: []             # equipo: lo que hay que tener. Habilidad: lo qu
 #  - item: bidon-agua           #   id de items.yaml
 #    cantidad: 2
 metodosPermitidos: [autodeclaracion, cuestionario]   # equipo: []. Salud: [cuestionario]
-video: https://www.youtube.com/watch?v=XXXXXXXXXXX    # opcional
 cuestionario:                   # obligatorio si metodosPermitidos incluye cuestionario
   umbral: 0.7                   # proporción de respuestas correctas para aprobar
   preguntas:
@@ -20,13 +19,3 @@ cuestionario:                   # obligatorio si metodosPermitidos incluye cuest
       opciones: [Opción A, Opción B, Opción C]
       correcta: 0               # índice de la opción correcta, empieza en 0
 ---
-
-Acá va la guía de la pestaña "Aprendé", en Markdown.
-
-## Qué necesitás
-
-## Paso a paso
-
-## Errores comunes
-
-En Salud y Seguridad: solo conocimiento, sin procedimientos de riesgo, y siempre derivar a un curso presencial.

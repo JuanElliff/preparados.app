@@ -11,5 +11,3 @@ itemsRequeridos: []
 metodosPermitidos:
   - autodeclaracion
 ---
-
-Guía de EJEMPLO. Reemplazar por el contenido real.

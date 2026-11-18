@@ -32,5 +32,3 @@ cuestionario:
         - C
       correcta: 2
 ---
-
-Guía de EJEMPLO. Reemplazar por el contenido real.

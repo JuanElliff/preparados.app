@@ -49,6 +49,27 @@ describe("catálogo", () => {
     expect(errores).toMatch(/agua-reserva: un logro de equipo necesita itemsRequeridos/);
     expect(errores).toMatch(/prerrequisito inexistente no-existe/);
   });
+
+  it("valida la biblioteca: ids, dominio, cuerpo de la guía, URL del video y logros relacionados", () => {
+    const roto: Catalogo = structuredClone(catalogo);
+    const guia = roto.biblioteca.find((e) => e.id === "agua-potabilizar-guia")!;
+    const video = roto.biblioteca.find((e) => e.id === "salud-botiquin-video")!;
+    guia.cuerpo = "   ";
+    guia.dominio = "no-existe";
+    guia.logros = ["logro-fantasma"];
+    delete video.videoUrl;
+    roto.biblioteca.push({ ...guia, cuerpo: "algo", dominio: "agua", logros: [] });
+    const errores = validarCatalogo(roto);
+    expect(errores).toContain("id de biblioteca duplicado: agua-potabilizar-guia");
+    expect(errores).toContain("entrada de biblioteca agua-potabilizar-guia: dominio inexistente no-existe");
+    expect(errores).toContain("entrada de biblioteca agua-potabilizar-guia: una guía necesita cuerpo");
+    expect(errores).toContain("entrada de biblioteca agua-potabilizar-guia: logro relacionado inexistente logro-fantasma");
+    expect(errores).toContain("entrada de biblioteca salud-botiquin-video: un video necesita videoUrl");
+  });
+
+  it("indexa la biblioteca por id", () => {
+    expect(idx.biblioteca.get("comida-despensa-guia")?.logros).toEqual(["comida-despensa", "comida-conservar"]);
+  });
 });
 
 describe("estados", () => {

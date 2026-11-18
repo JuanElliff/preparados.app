@@ -20,5 +20,3 @@ cuestionario:
         - B
       correcta: 1
 ---
-
-Guía de EJEMPLO. Reemplazar por el contenido real.

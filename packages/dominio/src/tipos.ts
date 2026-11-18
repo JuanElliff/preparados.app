@@ -6,11 +6,14 @@ export type ItemId = string;
 export type EntornoId = string;
 export type EscenarioId = string;
 export type CuestionarioId = string;
+export type EntradaBibliotecaId = string;
 
 /** Fecha ISO "YYYY-MM-DD". */
 export type FechaISO = string;
 
 export type TipoLogro = "habilidad" | "equipo";
+
+export type TipoEntradaBiblioteca = "guia" | "video";
 
 /** Métodos del MVP: autodeclaracion y cuestionario. foto_video y certificado son de fase 2. */
 export type MetodoVerificacion = "autodeclaracion" | "cuestionario" | "foto_video" | "certificado";
@@ -51,8 +54,6 @@ export interface Logro {
   itemsRequeridos: ItemRequerido[];
   /** Solo para habilidades. Los logros de equipo se derivan del inventario. */
   metodosPermitidos: MetodoVerificacion[];
-  guia?: string;
-  videoUrl?: string;
   cuestionario?: CuestionarioId;
 }
 
@@ -90,6 +91,24 @@ export interface Cuestionario {
   umbralAprobacion: number;
 }
 
+/**
+ * Una entrada de la biblioteca "Aprendé". Es contenido aparte de los logros:
+ * no se verifica ni da XP, solo se lee o se mira.
+ */
+export interface EntradaBiblioteca {
+  id: EntradaBibliotecaId;
+  dominio: DominioId;
+  tipo: TipoEntradaBiblioteca;
+  titulo: string;
+  resumen: string;
+  /** Markdown. Obligatorio si es guía. */
+  cuerpo?: string;
+  /** Obligatorio si es video. */
+  videoUrl?: string;
+  /** Logros relacionados, para ir y venir entre el camino y la biblioteca. */
+  logros: LogroId[];
+}
+
 export interface Catalogo {
   version: string;
   dominios: Dominio[];
@@ -98,6 +117,7 @@ export interface Catalogo {
   entornos: Entorno[];
   escenarios: Escenario[];
   cuestionarios: Cuestionario[];
+  biblioteca: EntradaBiblioteca[];
 }
 
 // ---------- Estado del usuario ----------

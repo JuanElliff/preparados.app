@@ -18,9 +18,10 @@ Si hay errores, el comando los lista con archivo y campo, y no genera el JSON.
 | `items.yaml` | Equipo que se puede registrar en el inventario |
 | `entornos.yaml` | Entornos y el peso de cada dominio (0 a 1) |
 | `escenarios.yaml` | Escenarios y el peso de cada dominio (0 a 1) |
-| `logros/<dominio>/<id>.md` | Un archivo por logro: datos arriba, guía de "Aprendé" abajo |
+| `logros/<dominio>/<id>.md` | Un archivo por logro: solo datos, sin texto después del `---` |
+| `biblioteca/<dominio>/<id>.md` | Una entrada de "Aprendé": datos arriba, guía en Markdown abajo |
 
-Para un logro nuevo: copiar `logros/_plantilla.md`. Los archivos que empiezan con `_` se ignoran.
+Para un logro nuevo: copiar `logros/_plantilla.md`. Para una entrada de "Aprendé": `biblioteca/_plantilla.md`. Los archivos que empiezan con `_` se ignoran.
 
 ## Reglas
 
@@ -28,7 +29,11 @@ Para un logro nuevo: copiar `logros/_plantilla.md`. Los archivos que empiezan co
 - El archivo de un logro se llama igual que su id.
 - **Equipo:** `metodosPermitidos: []`; se cumple solo, con el inventario (`itemsRequeridos`).
 - **Habilidad:** puede pedir items para estar disponible (por ejemplo, un anafe para cocinar sin red).
-- **Salud** (y Seguridad cuando entre): `metodosPermitidos: [cuestionario]`. Solo conocimiento, sin procedimientos de riesgo, y la guía deriva a un curso.
-- Si un logro permite `cuestionario`, lleva el bloque `cuestionario` con `umbral` y `preguntas`.
+- **Salud** (y Seguridad cuando entre): `metodosPermitidos: [cuestionario]`. Solo conocimiento, sin procedimientos de riesgo, y la guía de la biblioteca deriva a un curso.
+- Si un logro permite `cuestionario`, lleva el bloque `cuestionario` con `umbral` y `preguntas`. El cuestionario es la verificación del logro, no contenido de "Aprendé".
+
+## Biblioteca "Aprendé"
+
+Es contenido aparte de los logros: no se verifica ni da XP. Una entrada es `guia` (el texto va en Markdown después del `---`) o `video` (lleva `video` con la URL). `logros` enumera los logros relacionados, para ir y venir entre el camino y la biblioteca; puede estar vacío.
 
 Todo lo que dice "EJEMPLO" es de relleno para los tests: reemplazarlo.

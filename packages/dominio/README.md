@@ -23,11 +23,12 @@ Las acciones (`declararLogro`, `aprobarCuestionario`) devuelven un estado nuevo 
 
 ## Formato del catálogo
 
-Un JSON con `dominios`, `logros`, `items`, `entornos`, `escenarios` y `cuestionarios`. Los tipos están en `src/tipos.ts` y el ejemplo en `test/fixtures/catalogo-ejemplo.json` (contenido inventado, solo para tests).
+Un JSON con `dominios`, `logros`, `items`, `entornos`, `escenarios`, `cuestionarios` y `biblioteca`. Los tipos están en `src/tipos.ts` y el ejemplo en `test/fixtures/catalogo-ejemplo.json` (contenido inventado, solo para tests).
 
 - Un logro de **equipo** se cumple solo, con el inventario (`itemsRequeridos`), y no lleva `metodosPermitidos`.
 - Un logro de **habilidad** puede pedir items como prerrequisito para estar disponible.
 - Qué métodos acepta cada logro se define en el catálogo. Por ejemplo, Salud solo con `cuestionario`.
+- La **biblioteca** ("Aprendé") es contenido aparte: guías y videos que no se verifican ni dan XP, con los logros que tocan en `logros`.
 
 ## Decisiones provisorias en el código
 

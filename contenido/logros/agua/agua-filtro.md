@@ -12,5 +12,3 @@ itemsRequeridos:
     cantidad: 1
 metodosPermitidos: []
 ---
-
-Guía de EJEMPLO. Reemplazar por el contenido real.

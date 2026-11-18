@@ -1,8 +1,9 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, join, relative } from "node:path";
 import {
   type Catalogo,
   type Cuestionario,
+  type EntradaBiblioteca,
   type Logro,
   type MetodoVerificacion,
   validarCatalogo,
@@ -29,6 +30,7 @@ function leerYaml<T>(dir: string, archivo: string, errores: string[], vacio: T):
 }
 
 function archivosMd(dir: string): string[] {
+  if (!existsSync(dir)) return [];
   return readdirSync(dir).flatMap((nombre) => {
     const ruta = join(dir, nombre);
     if (nombre.startsWith("_") || nombre.startsWith(".")) return [];
@@ -40,21 +42,31 @@ function archivosMd(dir: string): string[] {
 const esTexto = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
 const esListaDeTextos = (v: unknown): v is string[] => Array.isArray(v) && v.every(esTexto);
 
-/** Lee un archivo de logro (frontmatter YAML + guía en Markdown). */
-function leerLogro(ruta: string, raiz: string, errores: string[]): { logro: Logro; cuestionario?: Cuestionario } | null {
+/** Separa el frontmatter YAML del cuerpo en Markdown. */
+function leerArchivo(
+  ruta: string,
+  raiz: string,
+  errores: string[],
+): { nombre: string; d: Record<string, unknown>; cuerpo: string } | null {
   const nombre = relative(raiz, ruta);
   const m = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/.exec(leer(ruta));
   if (!m) {
     errores.push(`${nombre}: falta el bloque --- de datos al principio`);
     return null;
   }
-  let d: Record<string, unknown>;
   try {
-    d = (parse(m[1] ?? "") ?? {}) as Record<string, unknown>;
+    return { nombre, d: (parse(m[1] ?? "") ?? {}) as Record<string, unknown>, cuerpo: (m[2] ?? "").trim() };
   } catch (e) {
     errores.push(`${nombre}: ${(e as Error).message}`);
     return null;
   }
+}
+
+/** Lee un archivo de logro: solo datos. El contenido de "Aprendé" vive en biblioteca/. */
+function leerLogro(ruta: string, raiz: string, errores: string[]): { logro: Logro; cuestionario?: Cuestionario } | null {
+  const a = leerArchivo(ruta, raiz, errores);
+  if (!a) return null;
+  const { nombre, d, cuerpo } = a;
 
   const err = (msg: string) => errores.push(`${nombre}: ${msg}`);
   const antes = errores.length;
@@ -77,11 +89,11 @@ function leerLogro(ruta: string, raiz: string, errores: string[]): { logro: Logr
     Array.isArray(items) &&
     items.every((i) => typeof i === "object" && i !== null && esTexto((i as { item?: unknown }).item) && typeof (i as { cantidad?: unknown }).cantidad === "number");
   if (!itemsOk) err("itemsRequeridos: cada uno lleva item y cantidad");
-  if (d.video !== undefined && !esTexto(d.video)) err("video tiene que ser una URL");
+  if (d.video !== undefined) err("los videos ahora son entradas de biblioteca/");
+  if (cuerpo) err("el texto de los logros se movió a biblioteca/: el archivo termina en el ---");
   if (errores.length > antes) return null;
 
   const id = d.id as string;
-  const guia = (m[2] ?? "").trim();
   const logro: Logro = {
     id,
     dominio: d.dominio as string,
@@ -93,8 +105,6 @@ function leerLogro(ruta: string, raiz: string, errores: string[]): { logro: Logr
     itemsRequeridos: items as Logro["itemsRequeridos"],
     metodosPermitidos: metodos as MetodoVerificacion[],
     ...(d.xpBase !== undefined && { xpBase: d.xpBase as number }),
-    ...(guia && { guia }),
-    ...(d.video !== undefined && { videoUrl: d.video as string }),
   };
 
   if (d.cuestionario === undefined) return { logro };
@@ -123,6 +133,39 @@ function leerLogro(ruta: string, raiz: string, errores: string[]): { logro: Logr
   return { logro: { ...logro, cuestionario: cuestionario.id }, cuestionario };
 }
 
+/** Lee una entrada de la biblioteca (frontmatter YAML + cuerpo en Markdown). */
+function leerEntrada(ruta: string, raiz: string, errores: string[]): EntradaBiblioteca | null {
+  const a = leerArchivo(ruta, raiz, errores);
+  if (!a) return null;
+  const { nombre, d, cuerpo } = a;
+
+  const err = (msg: string) => errores.push(`${nombre}: ${msg}`);
+  const antes = errores.length;
+  if (!esTexto(d.id)) err("falta id");
+  else if (basename(ruta, ".md") !== d.id) err(`el archivo tiene que llamarse ${d.id}.md`);
+  if (!esTexto(d.dominio)) err("falta dominio");
+  if (d.tipo !== "guia" && d.tipo !== "video") err("tipo tiene que ser guia o video");
+  if (!esTexto(d.titulo)) err("falta titulo");
+  if (!esTexto(d.resumen)) err("falta resumen");
+  const logros = d.logros ?? [];
+  if (!Array.isArray(logros) || !logros.every(esTexto)) err("logros tiene que ser una lista de ids");
+  if (d.video !== undefined && !esTexto(d.video)) err("video tiene que ser una URL");
+  if (d.tipo === "guia" && !cuerpo) err("una guía lleva el texto en Markdown después del ---");
+  if (d.tipo === "video" && d.video === undefined) err("un video lleva video con la URL");
+  if (errores.length > antes) return null;
+
+  return {
+    id: d.id as string,
+    dominio: d.dominio as string,
+    tipo: d.tipo as EntradaBiblioteca["tipo"],
+    titulo: d.titulo as string,
+    resumen: d.resumen as string,
+    logros: logros as string[],
+    ...(cuerpo && { cuerpo }),
+    ...(d.video !== undefined && { videoUrl: d.video as string }),
+  };
+}
+
 /** Lee la carpeta de contenido, arma el catálogo y lo valida con las reglas del dominio. */
 export function compilarCatalogo(dir: string): Compilacion {
   const errores: string[] = [];
@@ -139,6 +182,12 @@ export function compilarCatalogo(dir: string): Compilacion {
     if (r.cuestionario) cuestionarios.push(r.cuestionario);
   }
 
+  const biblioteca: EntradaBiblioteca[] = [];
+  for (const ruta of archivosMd(join(dir, "biblioteca")).sort()) {
+    const e = leerEntrada(ruta, dir, errores);
+    if (e) biblioteca.push(e);
+  }
+
   const catalogo: Catalogo = {
     version: esTexto(meta.version) ? meta.version : "",
     dominios: leerYaml(dir, "dominios.yaml", errores, []),
@@ -147,6 +196,7 @@ export function compilarCatalogo(dir: string): Compilacion {
     escenarios: leerYaml(dir, "escenarios.yaml", errores, []),
     logros,
     cuestionarios,
+    biblioteca,
   };
   if (errores.length === 0) errores.push(...validarCatalogo(catalogo));
   return { catalogo, errores };
