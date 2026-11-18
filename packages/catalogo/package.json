@@ -1,0 +1,23 @@
+{
+  "name": "@preparados/catalogo",
+  "version": "0.1.0",
+  "description": "Compila la carpeta contenido/ (YAML + Markdown) al catálogo JSON que usa la app, y lo valida.",
+  "type": "module",
+  "main": "src/compilar.ts",
+  "types": "src/compilar.ts",
+  "scripts": {
+    "compilar": "tsx src/cli.ts ../../contenido dist/catalogo.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@preparados/dominio": "*",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}

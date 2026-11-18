@@ -1,0 +1,10 @@
+# Los ids son permanentes: no se renombran ni se borran una vez publicados.
+- id: agua
+  nombre: Agua
+  orden: 1
+- id: comida
+  nombre: Comida
+  orden: 2
+- id: salud
+  nombre: Salud
+  orden: 3

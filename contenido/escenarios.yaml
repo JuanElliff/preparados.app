@@ -1,0 +1,14 @@
+# Peso de cada dominio según el escenario, de 0 a 1.
+# Los ids son permanentes. Pesos de EJEMPLO: definir.
+- id: corte-servicios
+  nombre: Corte de servicios
+  pesos: { agua: 1, comida: 0.6, salud: 0.4 }
+- id: pandemia
+  nombre: Pandemia
+  pesos: { agua: 0.3, comida: 0.7, salud: 1 }
+- id: catastrofe-natural
+  nombre: Catástrofe natural
+  pesos: { agua: 1, comida: 0.8, salud: 0.9 }
+- id: colapso-social
+  nombre: Colapso social
+  pesos: { agua: 0.9, comida: 1, salud: 0.9 }

@@ -1,0 +1,22 @@
+# Catálogo de equipo. vence: true habilita la fecha de vencimiento en el inventario.
+# Los ids son permanentes. Items de EJEMPLO: reemplazar.
+- id: bidon-agua
+  nombre: Bidón de agua
+  categoria: agua
+  vence: true
+- id: filtro-agua
+  nombre: Filtro de agua
+  categoria: agua
+  vence: false
+- id: conserva
+  nombre: Conserva
+  categoria: comida
+  vence: true
+- id: anafe
+  nombre: Anafe
+  categoria: comida
+  vence: false
+- id: botiquin
+  nombre: Botiquín básico
+  categoria: salud
+  vence: true

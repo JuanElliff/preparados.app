@@ -1,0 +1,126 @@
+{
+  "version": "ejemplo-0.1",
+  "dominios": [
+    { "id": "agua", "nombre": "Agua", "orden": 1 },
+    { "id": "comida", "nombre": "Comida", "orden": 2 },
+    { "id": "salud", "nombre": "Salud", "orden": 3 }
+  ],
+  "items": [
+    { "id": "bidon-agua", "nombre": "Bidón de agua", "categoria": "agua", "vence": true },
+    { "id": "filtro-agua", "nombre": "Filtro de agua", "categoria": "agua", "vence": false },
+    { "id": "conserva", "nombre": "Conserva", "categoria": "comida", "vence": true },
+    { "id": "anafe", "nombre": "Anafe", "categoria": "comida", "vence": false },
+    { "id": "botiquin", "nombre": "Botiquín básico", "categoria": "salud", "vence": true }
+  ],
+  "logros": [
+    {
+      "id": "agua-reserva", "dominio": "agua", "tipo": "equipo",
+      "titulo": "Reserva de agua (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 1, "prerrequisitos": [],
+      "itemsRequeridos": [{ "item": "bidon-agua", "cantidad": 2 }],
+      "metodosPermitidos": []
+    },
+    {
+      "id": "agua-potabilizar", "dominio": "agua", "tipo": "habilidad",
+      "titulo": "Potabilizar agua (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 1, "prerrequisitos": [], "itemsRequeridos": [],
+      "metodosPermitidos": ["autodeclaracion", "cuestionario"],
+      "cuestionario": "q-agua-potabilizar"
+    },
+    {
+      "id": "agua-filtro", "dominio": "agua", "tipo": "equipo",
+      "titulo": "Filtro de agua (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 2, "prerrequisitos": ["agua-potabilizar"],
+      "itemsRequeridos": [{ "item": "filtro-agua", "cantidad": 1 }],
+      "metodosPermitidos": []
+    },
+    {
+      "id": "agua-lluvia", "dominio": "agua", "tipo": "habilidad",
+      "titulo": "Captar agua de lluvia (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 2, "prerrequisitos": ["agua-potabilizar"], "itemsRequeridos": [],
+      "metodosPermitidos": ["autodeclaracion"]
+    },
+    {
+      "id": "comida-despensa", "dominio": "comida", "tipo": "equipo",
+      "titulo": "Despensa para 7 días (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 1, "prerrequisitos": [],
+      "itemsRequeridos": [{ "item": "conserva", "cantidad": 14 }],
+      "metodosPermitidos": []
+    },
+    {
+      "id": "comida-cocinar-sin-red", "dominio": "comida", "tipo": "habilidad",
+      "titulo": "Cocinar sin red eléctrica ni gas (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 1, "prerrequisitos": [],
+      "itemsRequeridos": [{ "item": "anafe", "cantidad": 1 }],
+      "metodosPermitidos": ["autodeclaracion"]
+    },
+    {
+      "id": "comida-conservar", "dominio": "comida", "tipo": "habilidad",
+      "titulo": "Conservar alimentos (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 2, "prerrequisitos": ["comida-cocinar-sin-red"], "itemsRequeridos": [],
+      "metodosPermitidos": ["autodeclaracion", "cuestionario"],
+      "cuestionario": "q-comida-conservar"
+    },
+    {
+      "id": "salud-botiquin", "dominio": "salud", "tipo": "equipo",
+      "titulo": "Botiquín básico (ejemplo)", "descripcion": "Contenido de ejemplo.",
+      "profundidad": 1, "prerrequisitos": [],
+      "itemsRequeridos": [{ "item": "botiquin", "cantidad": 1 }],
+      "metodosPermitidos": []
+    },
+    {
+      "id": "salud-conocimiento-1", "dominio": "salud", "tipo": "habilidad",
+      "titulo": "Conocimiento de salud, nivel 1 (ejemplo)", "descripcion": "Contenido de ejemplo. Solo conocimiento; deriva a un curso.",
+      "profundidad": 1, "prerrequisitos": [], "itemsRequeridos": [],
+      "metodosPermitidos": ["cuestionario"],
+      "cuestionario": "q-salud-1"
+    },
+    {
+      "id": "salud-conocimiento-2", "dominio": "salud", "tipo": "habilidad",
+      "titulo": "Conocimiento de salud, nivel 2 (ejemplo)", "descripcion": "Contenido de ejemplo. Solo conocimiento; deriva a un curso.",
+      "profundidad": 2, "prerrequisitos": ["salud-conocimiento-1"], "itemsRequeridos": [],
+      "metodosPermitidos": ["cuestionario"],
+      "cuestionario": "q-salud-2"
+    }
+  ],
+  "cuestionarios": [
+    {
+      "id": "q-agua-potabilizar", "logro": "agua-potabilizar", "umbralAprobacion": 0.7,
+      "preguntas": [
+        { "enunciado": "Pregunta de ejemplo 1", "opciones": ["A", "B", "C"], "correcta": 0 },
+        { "enunciado": "Pregunta de ejemplo 2", "opciones": ["A", "B", "C"], "correcta": 1 },
+        { "enunciado": "Pregunta de ejemplo 3", "opciones": ["A", "B", "C"], "correcta": 2 }
+      ]
+    },
+    {
+      "id": "q-comida-conservar", "logro": "comida-conservar", "umbralAprobacion": 0.7,
+      "preguntas": [
+        { "enunciado": "Pregunta de ejemplo 1", "opciones": ["A", "B"], "correcta": 1 }
+      ]
+    },
+    {
+      "id": "q-salud-1", "logro": "salud-conocimiento-1", "umbralAprobacion": 0.7,
+      "preguntas": [
+        { "enunciado": "Pregunta de ejemplo 1", "opciones": ["A", "B"], "correcta": 0 }
+      ]
+    },
+    {
+      "id": "q-salud-2", "logro": "salud-conocimiento-2", "umbralAprobacion": 0.7,
+      "preguntas": [
+        { "enunciado": "Pregunta de ejemplo 1", "opciones": ["A", "B"], "correcta": 0 }
+      ]
+    }
+  ],
+  "entornos": [
+    { "id": "ciudad", "nombre": "Ciudad", "pesos": { "agua": 1, "comida": 0.8, "salud": 0.8 } },
+    { "id": "pueblo", "nombre": "Pueblo", "pesos": { "agua": 0.8, "comida": 0.7, "salud": 0.9 } },
+    { "id": "campo", "nombre": "Campo", "pesos": { "agua": 0.6, "comida": 0.5, "salud": 1 } },
+    { "id": "barrio-privado", "nombre": "Barrio privado", "pesos": { "agua": 0.9, "comida": 0.8, "salud": 0.8 } }
+  ],
+  "escenarios": [
+    { "id": "corte-servicios", "nombre": "Corte de servicios", "pesos": { "agua": 1, "comida": 0.6, "salud": 0.4 } },
+    { "id": "pandemia", "nombre": "Pandemia", "pesos": { "agua": 0.3, "comida": 0.7, "salud": 1 } },
+    { "id": "catastrofe-natural", "nombre": "Catástrofe natural", "pesos": { "agua": 1, "comida": 0.8, "salud": 0.9 } },
+    { "id": "colapso-social", "nombre": "Colapso social", "pesos": { "agua": 0.9, "comida": 1, "salud": 0.9 } }
+  ]
+}
