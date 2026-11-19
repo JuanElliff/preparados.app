@@ -1,0 +1,119 @@
+/*
+ * El tema, en un solo archivo: tipografías, colores y tamaños.
+ * Nada de degradados ni sombras blandas: superficies planas, bordes finos y esquinas casi rectas.
+ *
+ * Modos: por defecto sigue al sistema. [data-tema="claro"] y [data-tema="oscuro"] lo fuerzan
+ * desde Perfil, y por eso cada color se define en los tres lugares.
+ * Todo texto sobre su superficie llega a 4,5:1 como mínimo (lo verifica test/tema.test.ts).
+ */
+
+/* Rye (títulos) y Bitter (texto), subset latin: traen acentos, ñ y signos de apertura.
+   Van dentro de la app: no se piden a internet. */
+@font-face {
+  font-family: "Rye";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fuentes/rye.woff2") format("woff2");
+}
+
+/* Bitter es variable: un solo archivo cubre de 400 a 700. */
+@font-face {
+  font-family: "Bitter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./fuentes/bitter.woff2") format("woff2");
+}
+
+:root {
+  /* Tipografía */
+  --fuente-titulo: "Rye", Georgia, serif;
+  --fuente-texto: "Bitter", Georgia, serif;
+
+  /* Tamaños de texto, pensados a 390 px de ancho */
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.125rem;
+  --texto-xl: 1.375rem;
+  --texto-2xl: 1.75rem;
+  --texto-3xl: 2.25rem;
+  --interlinea: 1.5;
+  --interlinea-titulo: 1.15;
+  --espaciado-rotulo: 0.12em;
+
+  /* Espacios */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+
+  /* Trazos y medidas */
+  --trazo: 1px;
+  --trazo-fuerte: 2px;
+  --radio: 3px;
+  --radio-redondo: 999px;
+  --alto-nav: 3.75rem;
+  --ancho-app: 430px;
+  --toque-minimo: 44px;
+
+  /* Modo claro: beige de tono militar */
+  --fondo: #d6cfb6;
+  --superficie: #e1dbc5;
+  --superficie-alta: #ebe5d2;
+  --borde: #9b9273;
+  --borde-suave: #b5ac8d;
+  --texto: #20211a;
+  --texto-suave: #4b4d42;
+  --acento: #41491f;
+  --acento-texto: #f1ecd9;
+  --apagado: #55584a;
+  --alerta: #7a4a12;
+  --error: #8c2f20;
+  --exito: #3c5120;
+  --foco: #41491f;
+  color-scheme: light;
+}
+
+/* Modo oscuro: negro y gris. Se aplica si el sistema lo pide y el usuario no eligió claro. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --fondo: #0e0e0d;
+    --superficie: #171715;
+    --superficie-alta: #21211e;
+    --borde: #3d3d37;
+    --borde-suave: #2b2b27;
+    --texto: #eceae2;
+    --texto-suave: #a5a49a;
+    --acento: #c8b98c;
+    --acento-texto: #15150f;
+    --apagado: #8c8c82;
+    --alerta: #e0a46d;
+    --error: #e59078;
+    --exito: #a3b86f;
+    --foco: #c8b98c;
+    color-scheme: dark;
+  }
+}
+
+/* Elegido a mano en Perfil: gana sobre la preferencia del sistema. */
+:root[data-tema="oscuro"] {
+  --fondo: #0e0e0d;
+  --superficie: #171715;
+  --superficie-alta: #21211e;
+  --borde: #3d3d37;
+  --borde-suave: #2b2b27;
+  --texto: #eceae2;
+  --texto-suave: #a5a49a;
+  --acento: #c8b98c;
+  --acento-texto: #15150f;
+  --apagado: #8c8c82;
+  --alerta: #e0a46d;
+  --error: #e59078;
+  --exito: #a3b86f;
+  --foco: #c8b98c;
+  color-scheme: dark;
+}

@@ -124,3 +124,14 @@ Preparemos la publicación en https://github.com/JuanElliff/preparados.app (repo
 3. Proponeme 2 o 3 licencias posibles para el código (y si conviene una distinta para el contenido de contenido/), con una línea sobre qué implica cada una. Esperá mi elección y agregá el archivo LICENSE.
 4. Recién con mi OK: git push -u origin main.
 ```
+
+## 14. Publicación automática en GitHub Pages
+
+```
+Configurá la publicación de packages/app en GitHub Pages, en https://juanelliff.github.io/preparados.app/
+- Workflow de GitHub Actions que en cada push a main: instala, corre npm test y npm run typecheck, compila el catálogo, hace el build de la app y la publica en Pages. Si fallan los tests, no publica.
+- Ruta base de Vite, manifest (start_url, scope) y service worker ajustados a /preparados.app/.
+- Que la navegación interna funcione al recargar cualquier pantalla en Pages.
+- Decime qué tengo que activar en la configuración del repo (Settings > Pages) y si hace falta algún permiso del workflow.
+No hagas push: lo hago yo o te lo pido.
+```

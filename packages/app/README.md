@@ -21,6 +21,11 @@ npm test -w @preparados/app           # vitest + @testing-library/react
   reusarla en React Native.
 - Navegación con hash (`#/camino`), sin router: cinco secciones en la barra inferior.
 - Los iconos son provisorios y se generan con `npm run iconos -w @preparados/app` (quedan versionados).
+- Las tipografías (Rye para títulos, Bitter para el texto; las dos con licencia OFL) viven en
+  `src/fuentes/`, subset latin bajado de Google Fonts. Van dentro de la app: no se piden a internet.
+- El tema está entero en `src/tema.css`: tipografías, colores y tamaños como variables CSS. Modo oscuro
+  negro y gris, modo claro beige militar; sigue al sistema salvo que se elija uno en Perfil. En desarrollo,
+  `#/tema` muestra el sistema visual completo.
 
 ## Probarla en el celular, en la red local
 

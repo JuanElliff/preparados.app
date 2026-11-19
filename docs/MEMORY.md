@@ -8,8 +8,9 @@ Estado actual, decisiones tomadas en el camino y bitácora. La actualiza quien t
 - `contenido/` tiene solo contenido de EJEMPLO, más `contenido/biblioteca/` con una entrada por dominio.
 - Git inicializado, rama `main`, sin remoto configurado todavía. Sin push.
 - `packages/app` es el esqueleto de la PWA: navegación de 5 secciones con pantallas vacías, tienda propia sobre `AlmacenIndexedDB` + `resumir()`, service worker que precachea la app y el catálogo.
-- Hechas las órdenes 0, 1, 2 y 3 de `docs/ordenes-claude-code.md`.
-- Próximo paso: orden 4 (tema visual). Está frenada hasta que el autor elija la tipografía entre las opciones propuestas.
+- Tema visual armado: `packages/app/src/tema.css` tiene tipografías, colores y tamaños como variables. Rye para títulos y Bitter para el texto, las dos empaquetadas en `src/fuentes/`.
+- Hechas las órdenes 0, 1, 2, 3 y 4 de `docs/ordenes-claude-code.md`.
+- Próximo paso: orden 5 (onboarding).
 
 ## Decisiones provisorias (pendientes de confirmar por el autor)
 
@@ -33,7 +34,6 @@ Viven en `packages/dominio/src/config.ts` o en el código indicado.
 - Umbral de aprobación de los cuestionarios (hoy 0,7 en los ejemplos).
 - Mecánicas propuestas para fase 2: vencido, oxidado, desafíos de escenario, simulacros.
 - Licencia del repo (antes de publicar).
-- Tipografía: elegir entre las opciones que proponga la orden 4.
 
 ## Bitácora
 
@@ -46,5 +46,7 @@ Formato: `- AAAA-MM-DD · quién · qué se hizo / decidió`.
 - 2026-11-18 · chat · Escritos `CLAUDE.md`, `docs/CONTEXT.md`, este archivo y las órdenes para Claude Code.
 - 2026-11-18 · claude-code · Orden 0: `npm install`, tests y typecheck en verde; git inicializado y primer commit.
 - 2026-11-18 · claude-code · Orden 1: "Aprendé" pasa a `Catalogo.biblioteca` (`EntradaBiblioteca`: guía o video) y a `contenido/biblioteca/<dominio>/<id>.md`. Los logros ya no llevan `guia` ni `videoUrl`. Decidido: el compilador da error si un archivo de logro tiene texto después del `---`, para que no quede contenido muerto.
+- 2026-11-18 · claude-code · Orden 4: tema en un solo archivo (`src/tema.css`), modo claro beige militar y oscuro negro y gris, con conmutador en Perfil (preferencia del dispositivo en localStorage, no va al respaldo) y página `#/tema` solo en desarrollo. Un test verifica 4,5:1 de contraste en los dos modos.
+- 2026-11-18 · autor · Tipografías elegidas: Rye para los títulos y Bitter para el texto.
 - 2026-11-18 · claude-code · Orden 3: creado `packages/app` (Vite + React + vite-plugin-pwa). Decidido: el catálogo se copia a `public/catalogo.json` antes de `dev` y `build` y se lee con fetch (no se empaqueta en el JS); navegación con hash propia en vez de router; la tienda reconcilia el guardado cuando cambió la versión del catálogo. Los iconos provisorios se generan con un script.
 - 2026-11-18 · claude-code · Orden 2: ante logros duplicados en un respaldo queda el de mejor verificación y, a igual multiplicador, el más antiguo (antes quedaba el primero).

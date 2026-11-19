@@ -5,7 +5,8 @@ import { Camino } from "./pantallas/Camino";
 import { Inicio } from "./pantallas/Inicio";
 import { Inventario } from "./pantallas/Inventario";
 import { Perfil } from "./pantallas/Perfil";
-import { type SeccionId, seccionDeRuta, useRuta } from "./rutas";
+import { PaginaTema } from "./pantallas/Tema";
+import { SECCIONES, type SeccionId, seccionDeRuta, useRuta } from "./rutas";
 
 const PANTALLAS: Record<SeccionId, () => React.JSX.Element> = {
   inicio: Inicio,
@@ -16,18 +17,27 @@ const PANTALLAS: Record<SeccionId, () => React.JSX.Element> = {
 };
 
 export function App() {
-  const seccion = seccionDeRuta(useRuta());
+  const ruta = useRuta();
   const estado = useEstadoApp();
-  const Pantalla = PANTALLAS[seccion.id];
+  const Pantalla = PANTALLAS[seccionDeRuta(ruta).id];
+  const activa = SECCIONES.find((s) => s.ruta === ruta)?.id ?? null;
+  // La página del sistema visual existe solo en desarrollo y no depende del catálogo.
+  const enTema = import.meta.env.DEV && ruta === "/tema";
 
   return (
     <div className="app">
       <main className="contenido">
-        {estado.fase === "cargando" && <p className="aviso">Cargando…</p>}
-        {estado.fase === "error" && <p className="aviso error">No se pudo cargar la app: {estado.mensaje}</p>}
-        {estado.fase === "listo" && <Pantalla />}
+        {enTema ? (
+          <PaginaTema />
+        ) : (
+          <>
+            {estado.fase === "cargando" && <p className="aviso">Cargando…</p>}
+            {estado.fase === "error" && <p className="aviso error">No se pudo cargar la app: {estado.mensaje}</p>}
+            {estado.fase === "listo" && <Pantalla />}
+          </>
+        )}
       </main>
-      <NavegacionInferior activa={seccion.id} />
+      <NavegacionInferior activa={activa} />
     </div>
   );
 }

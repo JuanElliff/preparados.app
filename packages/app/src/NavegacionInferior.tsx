@@ -1,6 +1,6 @@
 import { SECCIONES, type SeccionId } from "./rutas";
 
-export function NavegacionInferior({ activa }: { activa: SeccionId }) {
+export function NavegacionInferior({ activa }: { activa: SeccionId | null }) {
   return (
     <nav className="navegacion" aria-label="Secciones">
       {SECCIONES.map((s) => (
