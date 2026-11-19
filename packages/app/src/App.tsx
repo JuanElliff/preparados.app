@@ -10,6 +10,7 @@ import { Onboarding } from "./pantallas/Onboarding";
 import { Perfil } from "./pantallas/Perfil";
 import { PaginaTema } from "./pantallas/Tema";
 import {
+  entradaDeRuta,
   irA,
   logroDeRuta,
   RUTA_BIENVENIDA,
@@ -20,7 +21,7 @@ import {
   useRuta,
 } from "./rutas";
 
-const PANTALLAS: Record<SeccionId, () => React.JSX.Element | null> = {
+const PANTALLAS: Record<SeccionId, React.ComponentType> = {
   inicio: Inicio,
   camino: Camino,
   inventario: Inventario,
@@ -33,8 +34,10 @@ export function App() {
   const estado = useEstadoApp();
   const Pantalla = PANTALLAS[seccionDeRuta(ruta).id];
   const idLogro = logroDeRuta(ruta);
-  // El detalle de un logro cuelga del camino, así que esa pestaña queda marcada.
-  const activa = SECCIONES.find((s) => s.ruta === ruta)?.id ?? (idLogro ? "camino" : null);
+  const idEntrada = entradaDeRuta(ruta);
+  // Los detalles cuelgan de su sección, así que esa pestaña queda marcada.
+  const activa =
+    SECCIONES.find((s) => s.ruta === ruta)?.id ?? (idLogro ? "camino" : idEntrada ? "aprende" : null);
   // La página del sistema visual existe solo en desarrollo y no depende del catálogo.
   const enTema = import.meta.env.DEV && ruta === RUTA_TEMA;
   const enBienvenida = ruta === RUTA_BIENVENIDA;
@@ -55,7 +58,15 @@ export function App() {
         )}
         {!enTema &&
           estado.fase === "listo" &&
-          (enBienvenida ? <Onboarding /> : idLogro ? <DetalleLogro id={idLogro} /> : <Pantalla />)}
+          (enBienvenida ? (
+            <Onboarding />
+          ) : idLogro ? (
+            <DetalleLogro id={idLogro} />
+          ) : idEntrada ? (
+            <Aprende entrada={idEntrada} />
+          ) : (
+            <Pantalla />
+          ))}
       </main>
       {!enBienvenida && <NavegacionInferior activa={activa} />}
     </div>

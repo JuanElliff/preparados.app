@@ -376,7 +376,7 @@
       "tipo": "guia",
       "titulo": "Cómo potabilizar agua (ejemplo)",
       "resumen": "Contenido de EJEMPLO.",
-      "cuerpo": "Guía de EJEMPLO. Reemplazar por el contenido real.",
+      "cuerpo": "Guía de EJEMPLO. Reemplazar por el contenido real.\n\n## Qué necesitás\n\n- Una olla\n- Fuego",
       "logros": [
         "agua-potabilizar"
       ]

@@ -458,6 +458,54 @@ p {
   background: none;
 }
 
+/* Biblioteca */
+
+.video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: var(--trazo) solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+  background: var(--superficie);
+}
+
+.video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.guia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.guia h2,
+.guia h3,
+.guia h4 {
+  margin: var(--esp-2) 0 0;
+}
+
+.guia ul,
+.guia ol {
+  margin: 0;
+  padding-left: var(--esp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.guia code {
+  font-size: 0.9em;
+  padding: 0 var(--esp-1);
+  background: var(--superficie-alta);
+  border-radius: var(--radio);
+}
+
 /* Subida de nivel */
 
 .subida {
