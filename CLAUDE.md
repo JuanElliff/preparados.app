@@ -20,6 +20,7 @@ Contexto del proyecto y estado actual (se cargan al iniciar):
 | `packages/dominio` | Reglas en TS puro, sin UI: estados de logros, XP, niveles, pesos, % de preparación, recomendaciones, validación del catálogo |
 | `packages/datos` | Persistencia local: IndexedDB, respaldo exportable/importable, reconciliación con el catálogo |
 | `packages/catalogo` | Compila `contenido/` (YAML + Markdown) a `dist/catalogo.json` y lo valida |
+| `packages/app` | La PWA: React + Vite, celular primero, sin conexión. Ver `packages/app/README.md` |
 | `contenido/` | El catálogo. Ver `contenido/README.md` |
 | `docs/` | Contexto, memoria, órdenes de trabajo y referencias visuales |
 

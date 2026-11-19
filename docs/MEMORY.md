@@ -7,8 +7,9 @@ Estado actual, decisiones tomadas en el camino y bitácora. La actualiza quien t
 - Paquetes listos con tests: `dominio` (reglas), `datos` (persistencia y respaldo), `catalogo` (compila `contenido/`).
 - `contenido/` tiene solo contenido de EJEMPLO, más `contenido/biblioteca/` con una entrada por dominio.
 - Git inicializado, rama `main`, sin remoto configurado todavía. Sin push.
-- Hechas las órdenes 0, 1 y 2 de `docs/ordenes-claude-code.md`.
-- Próximo paso: orden 3 (esqueleto de la PWA en `packages/app`). La orden 4 (tema visual) necesita que el autor elija la tipografía.
+- `packages/app` es el esqueleto de la PWA: navegación de 5 secciones con pantallas vacías, tienda propia sobre `AlmacenIndexedDB` + `resumir()`, service worker que precachea la app y el catálogo.
+- Hechas las órdenes 0, 1, 2 y 3 de `docs/ordenes-claude-code.md`.
+- Próximo paso: orden 4 (tema visual). Está frenada hasta que el autor elija la tipografía entre las opciones propuestas.
 
 ## Decisiones provisorias (pendientes de confirmar por el autor)
 
@@ -45,4 +46,5 @@ Formato: `- AAAA-MM-DD · quién · qué se hizo / decidió`.
 - 2026-11-18 · chat · Escritos `CLAUDE.md`, `docs/CONTEXT.md`, este archivo y las órdenes para Claude Code.
 - 2026-11-18 · claude-code · Orden 0: `npm install`, tests y typecheck en verde; git inicializado y primer commit.
 - 2026-11-18 · claude-code · Orden 1: "Aprendé" pasa a `Catalogo.biblioteca` (`EntradaBiblioteca`: guía o video) y a `contenido/biblioteca/<dominio>/<id>.md`. Los logros ya no llevan `guia` ni `videoUrl`. Decidido: el compilador da error si un archivo de logro tiene texto después del `---`, para que no quede contenido muerto.
+- 2026-11-18 · claude-code · Orden 3: creado `packages/app` (Vite + React + vite-plugin-pwa). Decidido: el catálogo se copia a `public/catalogo.json` antes de `dev` y `build` y se lee con fetch (no se empaqueta en el JS); navegación con hash propia en vez de router; la tienda reconcilia el guardado cuando cambió la versión del catálogo. Los iconos provisorios se generan con un script.
 - 2026-11-18 · claude-code · Orden 2: ante logros duplicados en un respaldo queda el de mejor verificación y, a igual multiplicador, el más antiguo (antes quedaba el primero).

@@ -1,0 +1,96 @@
+/*
+ * Estilos mínimos del esqueleto, pensados para 390 px de ancho.
+ * El sistema visual completo (tipografías, modo claro beige, nodos del camino) entra en la orden 4.
+ */
+
+:root {
+  --fondo: #14150f;
+  --fondo-nav: #1c1d16;
+  --borde: #32342a;
+  --texto: #ece7d9;
+  --texto-suave: #a8a393;
+  --acento: #cbbf9a;
+  --error: #e4a08a;
+  --alto-nav: 3.75rem;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.contenido {
+  flex: 1;
+  padding: 1.25rem 1rem calc(var(--alto-nav) + env(safe-area-inset-bottom) + 1.5rem);
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.por-ahora,
+.aviso {
+  color: var(--texto-suave);
+  margin: 0;
+}
+
+.aviso.error {
+  color: var(--error);
+}
+
+.navegacion {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--fondo-nav);
+  border-top: 1px solid var(--borde);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab {
+  flex: 1;
+  min-height: var(--alto-nav);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tab[aria-current="page"] {
+  color: var(--acento);
+  box-shadow: inset 0 2px 0 var(--acento);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: -2px;
+}
