@@ -34,6 +34,8 @@ export type EstadoApp =
       resumen: Resumen | null;
       /** Lo que se descartó al ajustar el estado guardado a un catálogo más nuevo. */
       avisos: string[];
+      /** La fecha con la que se calculó el resumen: las pantallas usan la misma. */
+      hoy: FechaISO;
     };
 
 /** Lo que devuelve una acción sobre un logro, listo para que la pantalla muestre qué pasó. */
@@ -82,6 +84,7 @@ export function crearTienda(deps: Dependencias): Tienda {
     guardado,
     resumen: guardado ? resumir(idx, guardado.estado, hoy()) : null,
     avisos,
+    hoy: hoy(),
   });
 
   const iniciar = async () => {

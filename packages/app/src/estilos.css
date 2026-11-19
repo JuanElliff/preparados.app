@@ -80,6 +80,10 @@ p {
   color: var(--error);
 }
 
+.alerta {
+  color: var(--alerta);
+}
+
 /* Rótulos: en Bitter espaciado, porque Rye no se lee en tamaños chicos */
 
 .rotulo {
