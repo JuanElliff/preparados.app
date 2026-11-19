@@ -62,4 +62,10 @@ y equipo, y las guías derivan a cursos presenciales.
 
 ## Licencia
 
-Pendiente de definir.
+- El **código** está bajo [MIT](LICENSE): usalo, modificalo y publicalo como quieras, conservando el
+  aviso de copyright.
+- El **contenido** del catálogo (`contenido/`) está bajo
+  [CC BY-SA 4.0](contenido/LICENSE): se puede reutilizar y adaptar citando la fuente, y lo derivado
+  queda con la misma licencia.
+
+El contenido es informativo y no reemplaza formación presencial ni atención profesional.

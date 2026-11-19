@@ -6,3 +6,4 @@ dist/
 .DS_Store
 dev-dist/
 packages/app/public/catalogo.json
+docs/referencias/

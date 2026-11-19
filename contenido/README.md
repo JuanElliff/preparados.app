@@ -9,6 +9,8 @@ npm run compilar      # contenido/ → packages/catalogo/dist/catalogo.json
 
 Si hay errores, el comando los lista con archivo y campo, y no genera el JSON.
 
+Todo lo de esta carpeta se publica bajo CC BY-SA 4.0, distinta de la del código. Ver `LICENSE`.
+
 ## Archivos
 
 | Archivo | Qué tiene |
