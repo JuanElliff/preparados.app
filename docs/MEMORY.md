@@ -14,8 +14,9 @@ Estado actual, decisiones tomadas en el camino y bitácora. La actualiza quien t
 - Detalle de logro completo: acciones según `metodosPermitidos`, cuestionario de a una pregunta, cartel de subida de nivel y links a la biblioteca.
 - Inventario andando: alta, edición y baja de items, alertas de vencimiento arriba y logros de equipo abajo con lo que falta.
 - Aprendé andando: filtro por dominio, detalle con Markdown propio o video de YouTube, y links de ida y vuelta con los logros.
-- Hechas las órdenes 0 a 9 de `docs/ordenes-claude-code.md`.
-- Próximo paso: orden 10 (Inicio).
+- Inicio andando: % de preparación por escenario, nivel y XP por dominio, tres recomendaciones y los vencimientos.
+- Hechas las órdenes 0 a 10 de `docs/ordenes-claude-code.md`.
+- Próximo paso: orden 11 (Perfil y respaldo).
 
 ## Decisiones provisorias (pendientes de confirmar por el autor)
 
@@ -55,6 +56,7 @@ Formato: `- AAAA-MM-DD · quién · qué se hizo / decidió`.
 - 2026-11-18 · claude-code · Orden 3: creado `packages/app` (Vite + React + vite-plugin-pwa). Decidido: el catálogo se copia a `public/catalogo.json` antes de `dev` y `build` y se lee con fetch (no se empaqueta en el JS); navegación con hash propia en vez de router; la tienda reconcilia el guardado cuando cambió la versión del catálogo. Los iconos provisorios se generan con un script.
 - 2026-11-18 · autor · Tipografías elegidas: Rye para los títulos y Bitter para el texto. Opciones comparadas en https://claude.ai/code/artifact/a14067af-5e21-4928-b456-e8ca9fb0cb71
 - 2026-11-18 · claude-code · Orden 4: tema en un solo archivo (`src/tema.css`), modo claro beige militar y oscuro negro y gris, con conmutador en Perfil (preferencia del dispositivo en localStorage, no va al respaldo) y página `#/tema` solo en desarrollo. Un test verifica 4,5:1 de contraste en los dos modos.
+- 2026-11-18 · claude-code · Orden 10: pantalla Inicio, toda con `resumir()`. Cuatro tarjetas cortas (preparación, dominios, recomendaciones, vencimientos) con barras accesibles (`role="progressbar"`); la tarjeta de vencimientos solo aparece si hay algo por vencer.
 - 2026-11-18 · claude-code · Orden 9: pantalla Aprendé. Decidido: en vez de sumar una librería de Markdown, un lector propio (`src/biblioteca/markdown.ts`) que devuelve bloques y se dibuja con elementos de React, sin inyectar HTML; acepta títulos, párrafos, listas, énfasis y links http(s), y está documentado en `contenido/README.md`. Los videos se embeben desde youtube-nocookie y sin conexión muestran un aviso.
 - 2026-11-18 · claude-code · Orden 8: pantalla Inventario. Decidido: la baja se hace desde el formulario del item (tocar la fila, después "Quitar"), para que no se borre de un toque; se pueden cargar varias entradas del mismo item con distinto vencimiento; cada logro de equipo muestra a la vez los prerrequisitos pendientes y los items que faltan. La tienda ahora expone `hoy` para que las pantallas usen la misma fecha que el resumen.
 - 2026-11-18 · claude-code · Orden 7: detalle de logro con "Lo sé hacer" y cuestionario, errores en castellano y cartel de subida de nivel. Decidido: las acciones viven en la tienda (`declarar`, `responderCuestionario`), que persiste y avisa si el dominio subió de nivel comparando el resumen de antes y el de después; los links a la biblioteca apuntan a `#/aprende/<id>`, que empieza a funcionar en la orden 9.

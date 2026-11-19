@@ -17,6 +17,7 @@ export const RUTA_TEMA = "/tema";
 
 export const RUTA_CAMINO = "/camino";
 export const RUTA_APRENDE = "/aprende";
+export const RUTA_INVENTARIO = "/inventario";
 
 /** El detalle de un logro cuelga del camino: #/logro/<id>. */
 export const rutaDeLogro = (id: string): string => `/logro/${encodeURIComponent(id)}`;
