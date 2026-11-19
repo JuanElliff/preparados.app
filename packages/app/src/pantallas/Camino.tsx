@@ -17,6 +17,13 @@ const NOMBRE_ESTADO: Record<EstadoLogro, string> = {
   bloqueado: "bloqueado",
 };
 
+/**
+ * Última posición de scroll dentro del camino. Vive fuera del componente porque se vuelve a montar
+ * cada vez que se entra (incluso al volver del detalle de un logro): sin esto, siempre arrancaría
+ * desde abajo y se perdería el lugar donde se estaba.
+ */
+let scrollRecordado: number | null = null;
+
 export function Camino() {
   const estado = useEstadoApp();
   const catalogo = estado.fase === "listo" ? estado.catalogo : null;
@@ -27,9 +34,22 @@ export function Camino() {
     [catalogo],
   );
 
-  // El árbol se recorre de abajo hacia arriba, así que arranca abajo.
+  // La primera vez arranca abajo (el árbol se recorre de abajo hacia arriba); después, recuerda
+  // dónde estabas.
   useEffect(() => {
-    globalThis.scrollTo?.({ top: document.body.scrollHeight, behavior: "instant" });
+    if (!camino) return;
+    globalThis.scrollTo?.({
+      top: scrollRecordado ?? document.body.scrollHeight,
+      behavior: "instant",
+    });
+    const recordar = () => {
+      scrollRecordado = globalThis.scrollY ?? 0;
+    };
+    globalThis.addEventListener("scroll", recordar);
+    return () => {
+      recordar();
+      globalThis.removeEventListener("scroll", recordar);
+    };
   }, [camino]);
 
   if (estado.fase !== "listo" || !catalogo || !camino) return null;

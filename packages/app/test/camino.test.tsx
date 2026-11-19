@@ -62,4 +62,28 @@ describe("camino", () => {
     fireEvent.click(screen.getByRole("button", { name: "Volver al camino" }));
     expect(await screen.findByRole("heading", { name: "Camino" })).toBeTruthy();
   });
+
+  it("al volver del detalle de un logro, recuerda dónde estaba en vez de saltar al fondo", async () => {
+    const llamadas: number[] = [];
+    globalThis.scrollTo = ((opciones?: ScrollToOptions) => llamadas.push(opciones?.top ?? 0)) as typeof scrollTo;
+
+    globalThis.location.hash = "#/camino";
+    await montar();
+    await screen.findByRole("heading", { name: "Camino" });
+
+    // El usuario se mueve por el árbol antes de tocar un logro.
+    Object.defineProperty(globalThis, "scrollY", { value: 350, configurable: true });
+    globalThis.dispatchEvent(new Event("scroll"));
+
+    fireEvent.click(nodo("Potabilizar agua \\(ejemplo\\)"));
+    await screen.findByRole("heading", { name: "Potabilizar agua (ejemplo)" });
+
+    fireEvent.click(screen.getByRole("button", { name: "Volver al camino" }));
+    await screen.findByRole("heading", { name: "Camino" });
+
+    expect(llamadas.at(-1)).toBe(350);
+
+    Object.defineProperty(globalThis, "scrollY", { value: 0, configurable: true });
+    globalThis.scrollTo = () => {};
+  });
 });

@@ -10,7 +10,7 @@ const esIOS = (): boolean => {
   return /iPhone|iPad|iPod/.test(ua) || iPadComoMac;
 };
 
-export const estaInstalada = (): boolean =>
+const estaInstalada = (): boolean =>
   globalThis.matchMedia?.("(display-mode: standalone)").matches === true ||
   (globalThis.navigator as { standalone?: boolean } | undefined)?.standalone === true;
 

@@ -26,4 +26,11 @@ describe("App", () => {
     await montar();
     expect(await screen.findByRole("heading", { name: "Inventario" })).toBeTruthy();
   });
+
+  it("muestra el cartel de versión de prueba, hasta en Inventario", async () => {
+    globalThis.location.hash = "#/inventario";
+    await montar();
+    await screen.findByRole("heading", { name: "Inventario" });
+    expect(screen.getByText("Versión de prueba · contenido de ejemplo")).toBeTruthy();
+  });
 });

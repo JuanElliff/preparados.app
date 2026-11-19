@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { ProveedorTienda, tiendaDelNavegador } from "./estado/contexto";
 import { aplicarTema, temaGuardado } from "./tema";
 import "./estilos.css";
@@ -12,8 +13,10 @@ if (!raiz) throw new Error("falta #raiz en index.html");
 
 createRoot(raiz).render(
   <StrictMode>
-    <ProveedorTienda tienda={tiendaDelNavegador()}>
-      <App />
-    </ProveedorTienda>
+    <ErrorBoundary>
+      <ProveedorTienda tienda={tiendaDelNavegador()}>
+        <App />
+      </ProveedorTienda>
+    </ErrorBoundary>
   </StrictMode>,
 );

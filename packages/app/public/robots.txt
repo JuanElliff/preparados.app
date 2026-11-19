@@ -1,0 +1,4 @@
+# Preparados.app todavía no se lanzó: el catálogo publicado es contenido de EJEMPLO.
+# Sacar este Disallow (o el archivo entero) cuando haya contenido real y se decida indexar.
+User-agent: *
+Disallow: /

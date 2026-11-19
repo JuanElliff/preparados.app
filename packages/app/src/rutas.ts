@@ -34,7 +34,7 @@ export const entradaDeRuta = (ruta: string): string | null =>
 export type Seccion = (typeof SECCIONES)[number];
 export type SeccionId = Seccion["id"];
 
-export const SECCION_INICIAL: Seccion = SECCIONES[0];
+const SECCION_INICIAL: Seccion = SECCIONES[0];
 
 /** Rutas con hash: no necesitan configuración del servidor y funcionan igual abriendo el archivo. */
 const rutaActual = (): string => globalThis.location?.hash.slice(1) || "/";

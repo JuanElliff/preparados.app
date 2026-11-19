@@ -71,8 +71,10 @@ export function Inventario() {
           <span className="rotulo">Qué es</span>
           <select
             value={form.item || primero}
-            onChange={(ev) => setForm({ ...form, item: ev.target.value })}
-            disabled={form.indice !== null}
+            onChange={(ev) => {
+              const item = ev.target.value;
+              setForm({ ...form, item, vencimiento: vence(item) ? form.vencimiento : "" });
+            }}
           >
             {catalogo.items.map((i) => (
               <option key={i.id} value={i.id}>

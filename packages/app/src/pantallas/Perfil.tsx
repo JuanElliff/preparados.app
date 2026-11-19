@@ -1,7 +1,8 @@
 import { exportarRespaldo, type Guardado, importarRespaldo } from "@preparados/datos";
 import type { EscenarioId } from "@preparados/dominio";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEstadoApp, useTienda } from "../estado/contexto";
+import { AvisoInstalacion } from "../InstalacionIOS";
 import { TEMAS, useTema } from "../tema";
 import { Seccion } from "./Seccion";
 
@@ -13,15 +14,27 @@ const ERROR_IMPORTACION: Record<string, string> = {
   entorno_inexistente: "El entorno del respaldo ya no existe en el catálogo.",
 };
 
+/** Vivienda y clima guardan solo, pero no en cada tecla: al salir del campo o tras esta pausa. */
+const DEMORA_GUARDADO_MS = 500;
+
 export function Perfil() {
   const tienda = useTienda();
   const estado = useEstadoApp();
+  const perfil = estado.fase === "listo" ? estado.guardado?.estado.perfil : undefined;
   const [tema, cambiarTema] = useTema();
   const [guardado, setGuardado] = useState(false);
   const [aConfirmar, setAConfirmar] = useState<{ guardado: Guardado; avisos: string[] } | null>(null);
   const [errorImportar, setErrorImportar] = useState<string | null>(null);
   const [borrando, setBorrando] = useState(false);
+  const [vivienda, setVivienda] = useState(perfil?.vivienda ?? "");
+  const [clima, setClima] = useState(perfil?.clima ?? "");
   const archivo = useRef<HTMLInputElement>(null);
+  const demora = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Si el usuario cierra la pantalla con un campo a medio escribir, no se pierde.
+  useEffect(() => () => {
+    if (demora.current) clearTimeout(demora.current);
+  }, []);
 
   if (estado.fase !== "listo") return null;
   const { catalogo } = estado;
@@ -31,6 +44,18 @@ export function Perfil() {
   const cambiarPerfil = async (cambio: Partial<typeof usuario.perfil>) => {
     await tienda.guardar({ ...usuario, perfil: { ...usuario.perfil, ...cambio } });
     setGuardado(true);
+  };
+
+  /** Vivienda y clima: actualiza en pantalla al toque, pero guarda recién tras una pausa. */
+  const escribirConDemora = (campo: "vivienda" | "clima", valor: string) => {
+    if (demora.current) clearTimeout(demora.current);
+    demora.current = setTimeout(() => void cambiarPerfil({ [campo]: valor }), DEMORA_GUARDADO_MS);
+  };
+
+  /** Al salir del campo, guarda ya mismo: no hace falta esperar la demora. */
+  const guardarAlSalir = (campo: "vivienda" | "clima", valor: string) => {
+    if (demora.current) clearTimeout(demora.current);
+    void cambiarPerfil({ [campo]: valor });
   };
 
   const alternarEscenario = (id: EscenarioId) => {
@@ -82,9 +107,13 @@ export function Perfil() {
           <span className="rotulo">Tipo de vivienda</span>
           <input
             type="text"
-            value={usuario.perfil.vivienda ?? ""}
+            value={vivienda}
             placeholder="Departamento, casa, casa con terreno…"
-            onChange={(ev) => void cambiarPerfil({ vivienda: ev.target.value })}
+            onChange={(ev) => {
+              setVivienda(ev.target.value);
+              escribirConDemora("vivienda", ev.target.value);
+            }}
+            onBlur={(ev) => guardarAlSalir("vivienda", ev.target.value)}
           />
         </label>
 
@@ -92,9 +121,13 @@ export function Perfil() {
           <span className="rotulo">Clima</span>
           <input
             type="text"
-            value={usuario.perfil.clima ?? ""}
+            value={clima}
             placeholder="Templado, frío y seco, subtropical…"
-            onChange={(ev) => void cambiarPerfil({ clima: ev.target.value })}
+            onChange={(ev) => {
+              setClima(ev.target.value);
+              escribirConDemora("clima", ev.target.value);
+            }}
+            onBlur={(ev) => guardarAlSalir("clima", ev.target.value)}
           />
         </label>
 
@@ -134,6 +167,8 @@ export function Perfil() {
           ))}
         </div>
       </div>
+
+      <AvisoInstalacion />
 
       <div className="tarjeta">
         <h2>Respaldo</h2>

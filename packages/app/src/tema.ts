@@ -21,17 +21,38 @@ export function temaGuardado(): Tema {
   }
 }
 
-/** Marca el tema en el <html>. Sin marca, manda la preferencia del sistema. */
+/** id del <meta name="theme-color"> que agrega un tema elegido a mano. */
+const ID_META_ELEGIDO = "theme-color-elegido";
+
+/**
+ * Marca el tema en el <html>. Sin marca, manda la preferencia del sistema: index.html ya trae un
+ * <meta name="theme-color"> por cada modo (con media query), así la barra acierta desde el primer
+ * pintado. Acá solo hace falta agregar un tercero cuando el tema se elige a mano, para que pise a
+ * esos dos sea cual sea la preferencia del sistema; y sacarlo al volver a "sistema".
+ */
 export function aplicarTema(tema: Tema): void {
   const raiz = globalThis.document?.documentElement;
   if (!raiz) return;
   if (tema === "sistema") delete raiz.dataset.tema;
   else raiz.dataset.tema = tema;
 
-  // La barra del navegador y la pantalla de inicio usan theme-color: que siga al tema.
+  const doc = globalThis.document;
+  if (!doc) return;
+  if (tema === "sistema") {
+    doc.getElementById(ID_META_ELEGIDO)?.remove();
+    return;
+  }
+
   const fondo = getComputedStyle(raiz).getPropertyValue("--fondo").trim();
-  const meta = globalThis.document?.querySelector('meta[name="theme-color"]');
-  if (fondo && meta) meta.setAttribute("content", fondo);
+  if (!fondo) return;
+  let meta = doc.getElementById(ID_META_ELEGIDO);
+  if (!meta) {
+    meta = doc.createElement("meta");
+    meta.id = ID_META_ELEGIDO;
+    meta.setAttribute("name", "theme-color");
+    doc.head.appendChild(meta);
+  }
+  meta.setAttribute("content", fondo);
 }
 
 export function elegirTema(tema: Tema): void {

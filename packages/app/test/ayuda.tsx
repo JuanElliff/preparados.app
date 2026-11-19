@@ -18,10 +18,17 @@ export const PERFIL: EstadoUsuario = {
 /**
  * Monta la app con un almacén en memoria. Sin estado guardado arranca el onboarding;
  * con estado, va directo a las secciones.
+ *
+ * `versionGuardada`: para simular que el catálogo cambió desde el último guardado (dispara la
+ * reconciliación). Por defecto, la misma versión del catálogo que se usa: sin cambios.
  */
-export async function montar(estado: EstadoUsuario | null = PERFIL, usado: Catalogo = catalogo) {
+export async function montar(
+  estado: EstadoUsuario | null = PERFIL,
+  usado: Catalogo = catalogo,
+  versionGuardada?: string,
+) {
   const almacen = new AlmacenMemoria();
-  if (estado) await almacen.guardar(nuevoGuardado(estado, usado.version));
+  if (estado) await almacen.guardar(nuevoGuardado(estado, versionGuardada ?? usado.version));
   const vista = render(
     <ProveedorTienda tienda={crearTienda({ almacen, cargarCatalogo: async () => usado, hoy: () => HOY })}>
       <App />

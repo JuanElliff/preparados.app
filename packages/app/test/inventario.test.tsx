@@ -74,6 +74,24 @@ describe("inventario", () => {
     });
   });
 
+  it("al editar se puede cambiar el item, y si deja de vencer se pierde la fecha vieja", async () => {
+    const { almacen } = await abrir({
+      ...PERFIL,
+      inventario: [{ item: "conserva", cantidad: 2, vencimiento: "2027-01-01" }],
+    });
+
+    clic(/^Conserva/);
+    expect(screen.getByLabelText("Qué es").hasAttribute("disabled")).toBe(false);
+
+    fireEvent.change(screen.getByLabelText("Qué es"), { target: { value: "anafe" } });
+    expect(screen.queryByLabelText("Vence el")).toBeNull();
+    clic("Guardar");
+
+    await waitFor(async () => {
+      expect((await almacen.cargar())?.estado.inventario).toEqual([{ item: "anafe", cantidad: 2 }]);
+    });
+  });
+
   it("arriba muestra las alertas de vencimiento", async () => {
     await abrir({
       ...PERFIL,

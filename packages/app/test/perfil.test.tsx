@@ -66,6 +66,34 @@ describe("perfil", () => {
     });
   });
 
+  it("vivienda y clima no escriben en cada tecla: recién guardan tras una pausa", async () => {
+    const { almacen } = await abrir();
+    vi.useFakeTimers();
+    const input = screen.getByLabelText("Tipo de vivienda");
+
+    fireEvent.change(input, { target: { value: "D" } });
+    fireEvent.change(input, { target: { value: "De" } });
+    fireEvent.change(input, { target: { value: "Dep" } });
+    expect((await almacen.cargar())?.estado.perfil.vivienda).toBeUndefined();
+
+    await vi.advanceTimersByTimeAsync(500);
+    expect((await almacen.cargar())?.estado.perfil.vivienda).toBe("Dep");
+
+    vi.useRealTimers();
+  });
+
+  it("salir del campo guarda ya mismo, sin esperar la pausa", async () => {
+    const { almacen } = await abrir();
+    const input = screen.getByLabelText("Clima");
+
+    fireEvent.change(input, { target: { value: "Templado" } });
+    fireEvent.blur(input);
+
+    await waitFor(async () => {
+      expect((await almacen.cargar())?.estado.perfil.clima).toBe("Templado");
+    });
+  });
+
   it("exporta un archivo con el respaldo", async () => {
     const urls: string[] = [];
     vi.stubGlobal("URL", {
@@ -157,6 +185,20 @@ describe("perfil", () => {
 
     await waitFor(async () => expect(await almacen.cargar()).toBeNull());
     expect(await screen.findByRole("heading", { name: "¿Dónde vivís?" })).toBeTruthy();
+  });
+});
+
+describe("aviso de instalación en iOS", () => {
+  it("si no está instalada, también se ve desde Perfil (no solo al final del onboarding)", async () => {
+    vi.stubGlobal("navigator", {
+      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Safari/604.1",
+      maxTouchPoints: 0,
+    });
+    vi.stubGlobal("matchMedia", () => ({ matches: false }));
+
+    await abrir();
+    expect(screen.getByRole("heading", { name: "Agregala a tu pantalla de inicio" })).toBeTruthy();
+    vi.unstubAllGlobals();
   });
 });
 

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { AvisoDescartes } from "./AvisoDescartes";
 import { useEstadoApp } from "./estado/contexto";
 import { NavegacionInferior } from "./NavegacionInferior";
 import { Aprende } from "./pantallas/Aprende";
@@ -50,6 +51,9 @@ export function App() {
 
   return (
     <div className="app">
+      {/* Hasta el lanzamiento: el catálogo es de ejemplo y robots.txt bloquea la indexación. */}
+      <p className="cartel-prueba">Versión de prueba · contenido de ejemplo</p>
+      {!enTema && estado.fase === "listo" && <AvisoDescartes avisos={estado.avisos} />}
       <main className="contenido">
         {enTema && <PaginaTema />}
         {!enTema && estado.fase === "cargando" && <p className="aviso">Cargando…</p>}

@@ -1,7 +1,7 @@
 import { CONFIG_POR_DEFECTO, type EntornoId, type EscenarioId, type EstadoUsuario, xpBase } from "@preparados/dominio";
 import { useState } from "react";
 import { useEstadoApp, useTienda } from "../estado/contexto";
-import { hayQueAvisarDeInstalacion } from "../instalacion";
+import { AvisoInstalacion } from "../InstalacionIOS";
 import { irA } from "../rutas";
 
 type Paso = 1 | 2 | 3 | 4;
@@ -77,19 +77,7 @@ export function Onboarding() {
           {ruta.length === 0 && <li className="por-ahora">Todavía no hay logros disponibles en el catálogo.</li>}
         </ul>
 
-        {hayQueAvisarDeInstalacion() && (
-          <div className="tarjeta">
-            <h2>Agregala a tu pantalla de inicio</h2>
-            <p>
-              En iPhone y iPad, Safari borra los datos de un sitio que no usás en 7 días. Instalada, la app
-              se queda con todo lo tuyo.
-            </p>
-            <p className="por-ahora">
-              Tocá <strong>Compartir</strong> (el cuadrito con la flecha) y después{" "}
-              <strong>Agregar a inicio</strong>.
-            </p>
-          </div>
-        )}
+        <AvisoInstalacion />
 
         <button type="button" className="boton boton--principal" onClick={() => irA("/")}>
           Empezar

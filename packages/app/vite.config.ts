@@ -26,6 +26,9 @@ export default defineConfig({
         scope: base,
         display: "standalone",
         orientation: "portrait",
+        // Para la pantalla de carga al abrir la PWA instalada. Fijo en oscuro: el manifest no
+        // puede seguir el tema elegido a mano (eso lo resuelve index.html + tema.ts una vez que
+        // carga la página).
         background_color: "#0e0e0d",
         theme_color: "#0e0e0d",
         // Relativos al manifest: así sirven igual en la raíz o dentro de /preparados.app/.
