@@ -9,8 +9,9 @@ Estado actual, decisiones tomadas en el camino y bitácora. La actualiza quien t
 - Git inicializado, rama `main`, sin remoto configurado todavía. Sin push.
 - `packages/app` es el esqueleto de la PWA: navegación de 5 secciones con pantallas vacías, tienda propia sobre `AlmacenIndexedDB` + `resumir()`, service worker que precachea la app y el catálogo.
 - Tema visual armado: `packages/app/src/tema.css` tiene tipografías, colores y tamaños como variables. Rye para títulos y Bitter para el texto, las dos empaquetadas en `src/fuentes/`.
-- Hechas las órdenes 0, 1, 2, 3 y 4 de `docs/ordenes-claude-code.md`.
-- Próximo paso: orden 5 (onboarding).
+- Onboarding andando: sin perfil guardado la app redirige a `#/bienvenida` (entorno, vivienda y clima, escenarios) y al terminar muestra la ruta inicial.
+- Hechas las órdenes 0 a 5 de `docs/ordenes-claude-code.md`.
+- Próximo paso: orden 6 (camino de logros en árbol).
 
 ## Decisiones provisorias (pendientes de confirmar por el autor)
 
@@ -47,6 +48,7 @@ Formato: `- AAAA-MM-DD · quién · qué se hizo / decidió`.
 - 2026-11-18 · claude-code · Orden 0: `npm install`, tests y typecheck en verde; git inicializado y primer commit.
 - 2026-11-18 · claude-code · Orden 1: "Aprendé" pasa a `Catalogo.biblioteca` (`EntradaBiblioteca`: guía o video) y a `contenido/biblioteca/<dominio>/<id>.md`. Los logros ya no llevan `guia` ni `videoUrl`. Decidido: el compilador da error si un archivo de logro tiene texto después del `---`, para que no quede contenido muerto.
 - 2026-11-18 · claude-code · Orden 4: tema en un solo archivo (`src/tema.css`), modo claro beige militar y oscuro negro y gris, con conmutador en Perfil (preferencia del dispositivo en localStorage, no va al respaldo) y página `#/tema` solo en desarrollo. Un test verifica 4,5:1 de contraste en los dos modos.
+- 2026-11-18 · claude-code · Orden 5: onboarding en 3 pasos más la pantalla de cierre con `rutaInicial`. Decidido: vive en la ruta `#/bienvenida` (sin pestaña y sin navegación inferior) para que la pantalla final sobreviva al guardado; vivienda y clima son texto libre, para no inventar una taxonomía que después choque con la del autor; el aviso de instalar en iOS sale solo en iPhone/iPad sin instalar.
 - 2026-11-18 · autor · Tipografías elegidas: Rye para los títulos y Bitter para el texto.
 - 2026-11-18 · claude-code · Orden 3: creado `packages/app` (Vite + React + vite-plugin-pwa). Decidido: el catálogo se copia a `public/catalogo.json` antes de `dev` y `build` y se lee con fetch (no se empaqueta en el JS); navegación con hash propia en vez de router; la tienda reconcilia el guardado cuando cambió la versión del catálogo. Los iconos provisorios se generan con un script.
 - 2026-11-18 · claude-code · Orden 2: ante logros duplicados en un respaldo queda el de mejor verificación y, a igual multiplicador, el más antiguo (antes quedaba el primero).

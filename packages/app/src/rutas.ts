@@ -9,6 +9,12 @@ export const SECCIONES = [
   { id: "perfil", ruta: "/perfil", titulo: "Perfil" },
 ] as const;
 
+/** El onboarding vive fuera de las secciones: no tiene pestaña. */
+export const RUTA_BIENVENIDA = "/bienvenida";
+
+/** Solo en desarrollo: la referencia del sistema visual. */
+export const RUTA_TEMA = "/tema";
+
 export type Seccion = (typeof SECCIONES)[number];
 export type SeccionId = Seccion["id"];
 
@@ -28,3 +34,7 @@ export function useRuta(): string {
 }
 
 export const seccionDeRuta = (ruta: string): Seccion => SECCIONES.find((s) => s.ruta === ruta) ?? SECCION_INICIAL;
+
+export const irA = (ruta: string): void => {
+  globalThis.location.hash = ruta;
+};

@@ -207,6 +207,72 @@ p {
   font-size: var(--texto-sm);
 }
 
+/* Formularios */
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-height: var(--toque-minimo);
+  padding: var(--esp-2) var(--esp-3);
+  background: var(--superficie);
+  border: var(--trazo) solid var(--borde-suave);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.opcion:has(:checked) {
+  border-color: var(--acento);
+  border-width: var(--trazo-fuerte);
+  background: var(--superficie-alta);
+}
+
+.opcion input {
+  accent-color: var(--acento);
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.campo input,
+.campo select {
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-base);
+  min-height: var(--toque-minimo);
+  padding: var(--esp-2) var(--esp-3);
+  background: var(--superficie);
+  color: var(--texto);
+  border: var(--trazo) solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.campo input::placeholder {
+  color: var(--apagado);
+}
+
+.lista-limpia {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
 /* Nodo de logro: logrado, disponible y bloqueado se distinguen a simple vista */
 
 .nodo {
