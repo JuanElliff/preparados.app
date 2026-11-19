@@ -15,6 +15,14 @@ export const RUTA_BIENVENIDA = "/bienvenida";
 /** Solo en desarrollo: la referencia del sistema visual. */
 export const RUTA_TEMA = "/tema";
 
+export const RUTA_CAMINO = "/camino";
+
+/** El detalle de un logro cuelga del camino: #/logro/<id>. */
+export const rutaDeLogro = (id: string): string => `/logro/${encodeURIComponent(id)}`;
+
+export const logroDeRuta = (ruta: string): string | null =>
+  ruta.startsWith("/logro/") ? decodeURIComponent(ruta.slice("/logro/".length)) : null;
+
 export type Seccion = (typeof SECCIONES)[number];
 export type SeccionId = Seccion["id"];
 

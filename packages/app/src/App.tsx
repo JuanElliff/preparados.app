@@ -3,14 +3,24 @@ import { useEstadoApp } from "./estado/contexto";
 import { NavegacionInferior } from "./NavegacionInferior";
 import { Aprende } from "./pantallas/Aprende";
 import { Camino } from "./pantallas/Camino";
+import { DetalleLogro } from "./pantallas/DetalleLogro";
 import { Inicio } from "./pantallas/Inicio";
 import { Inventario } from "./pantallas/Inventario";
 import { Onboarding } from "./pantallas/Onboarding";
 import { Perfil } from "./pantallas/Perfil";
 import { PaginaTema } from "./pantallas/Tema";
-import { irA, RUTA_BIENVENIDA, RUTA_TEMA, SECCIONES, type SeccionId, seccionDeRuta, useRuta } from "./rutas";
+import {
+  irA,
+  logroDeRuta,
+  RUTA_BIENVENIDA,
+  RUTA_TEMA,
+  SECCIONES,
+  type SeccionId,
+  seccionDeRuta,
+  useRuta,
+} from "./rutas";
 
-const PANTALLAS: Record<SeccionId, () => React.JSX.Element> = {
+const PANTALLAS: Record<SeccionId, () => React.JSX.Element | null> = {
   inicio: Inicio,
   camino: Camino,
   inventario: Inventario,
@@ -22,7 +32,9 @@ export function App() {
   const ruta = useRuta();
   const estado = useEstadoApp();
   const Pantalla = PANTALLAS[seccionDeRuta(ruta).id];
-  const activa = SECCIONES.find((s) => s.ruta === ruta)?.id ?? null;
+  const idLogro = logroDeRuta(ruta);
+  // El detalle de un logro cuelga del camino, así que esa pestaña queda marcada.
+  const activa = SECCIONES.find((s) => s.ruta === ruta)?.id ?? (idLogro ? "camino" : null);
   // La página del sistema visual existe solo en desarrollo y no depende del catálogo.
   const enTema = import.meta.env.DEV && ruta === RUTA_TEMA;
   const enBienvenida = ruta === RUTA_BIENVENIDA;
@@ -41,7 +53,9 @@ export function App() {
         {!enTema && estado.fase === "error" && (
           <p className="aviso error">No se pudo cargar la app: {estado.mensaje}</p>
         )}
-        {!enTema && estado.fase === "listo" && (enBienvenida ? <Onboarding /> : <Pantalla />)}
+        {!enTema &&
+          estado.fase === "listo" &&
+          (enBienvenida ? <Onboarding /> : idLogro ? <DetalleLogro id={idLogro} /> : <Pantalla />)}
       </main>
       {!enBienvenida && <NavegacionInferior activa={activa} />}
     </div>

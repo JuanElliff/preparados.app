@@ -348,12 +348,110 @@ p {
   color: var(--apagado);
   background: transparent;
   border-style: dashed;
-  cursor: not-allowed;
 }
 
 .nodo--bloqueado .nodo__marca,
 .nodo--bloqueado .nodo__dato {
   color: var(--apagado);
+}
+
+/* Camino: árbol de habilidades, se recorre de abajo hacia arriba */
+
+.camino {
+  overflow-x: auto;
+  margin: 0 calc(var(--esp-4) * -1);
+  padding: 0 var(--esp-4);
+}
+
+.camino__lienzo {
+  position: relative;
+  margin: 0 auto;
+}
+
+.camino__ramas {
+  position: absolute;
+  inset: 0;
+}
+
+.camino__rama {
+  fill: none;
+  stroke: var(--borde);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.camino__rama--recorrida {
+  stroke: var(--acento);
+}
+
+.camino__rotulo {
+  position: absolute;
+  text-align: center;
+  padding-top: var(--esp-2);
+  border-top: var(--trazo) solid var(--borde-suave);
+}
+
+.camino-nodo {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-1);
+  background: none;
+  border: 0;
+  color: var(--texto);
+  font-family: var(--fuente-texto);
+  cursor: pointer;
+}
+
+.camino-nodo__marca {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radio-redondo);
+  border: var(--trazo-fuerte) solid var(--borde);
+  background: var(--superficie);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-sm);
+  color: var(--texto-suave);
+}
+
+.camino-nodo__titulo {
+  font-size: var(--texto-xs);
+  line-height: 1.2;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.camino-nodo--logrado .camino-nodo__marca {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--acento-texto);
+}
+
+/* Lo disponible se tiene que ver de lejos: aro grueso y acento. */
+.camino-nodo--disponible .camino-nodo__marca {
+  border-color: var(--acento);
+  border-width: 4px;
+  color: var(--acento);
+  background: var(--superficie-alta);
+}
+
+.camino-nodo--bloqueado {
+  color: var(--apagado);
+}
+
+.camino-nodo--bloqueado .camino-nodo__marca {
+  border-style: dashed;
+  border-color: var(--borde-suave);
+  color: var(--apagado);
+  background: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
