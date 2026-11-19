@@ -19,13 +19,20 @@ export const PERFIL: EstadoUsuario = {
  * Monta la app con un almacén en memoria. Sin estado guardado arranca el onboarding;
  * con estado, va directo a las secciones.
  */
-export async function montar(estado: EstadoUsuario | null = PERFIL) {
+export async function montar(estado: EstadoUsuario | null = PERFIL, usado: Catalogo = catalogo) {
   const almacen = new AlmacenMemoria();
-  if (estado) await almacen.guardar(nuevoGuardado(estado, catalogo.version));
+  if (estado) await almacen.guardar(nuevoGuardado(estado, usado.version));
   const vista = render(
-    <ProveedorTienda tienda={crearTienda({ almacen, cargarCatalogo: async () => catalogo, hoy: () => HOY })}>
+    <ProveedorTienda tienda={crearTienda({ almacen, cargarCatalogo: async () => usado, hoy: () => HOY })}>
       <App />
     </ProveedorTienda>,
   );
   return { ...vista, almacen };
+}
+
+/** Copia del catálogo de ejemplo con un retoque, para probar casos que el ejemplo no cubre. */
+export function catalogoCon(retoque: (c: Catalogo) => void): Catalogo {
+  const copia = structuredClone(catalogo);
+  retoque(copia);
+  return copia;
 }

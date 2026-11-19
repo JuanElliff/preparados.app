@@ -16,12 +16,19 @@ export const RUTA_BIENVENIDA = "/bienvenida";
 export const RUTA_TEMA = "/tema";
 
 export const RUTA_CAMINO = "/camino";
+export const RUTA_APRENDE = "/aprende";
 
 /** El detalle de un logro cuelga del camino: #/logro/<id>. */
 export const rutaDeLogro = (id: string): string => `/logro/${encodeURIComponent(id)}`;
 
 export const logroDeRuta = (ruta: string): string | null =>
   ruta.startsWith("/logro/") ? decodeURIComponent(ruta.slice("/logro/".length)) : null;
+
+/** El detalle de una entrada de la biblioteca: #/aprende/<id>. */
+export const rutaDeEntrada = (id: string): string => `${RUTA_APRENDE}/${encodeURIComponent(id)}`;
+
+export const entradaDeRuta = (ruta: string): string | null =>
+  ruta.startsWith(`${RUTA_APRENDE}/`) ? decodeURIComponent(ruta.slice(RUTA_APRENDE.length + 1)) : null;
 
 export type Seccion = (typeof SECCIONES)[number];
 export type SeccionId = Seccion["id"];

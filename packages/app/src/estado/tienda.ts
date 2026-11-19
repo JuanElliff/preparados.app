@@ -1,10 +1,18 @@
 import { type Almacen, type Guardado, nuevoGuardado, reconciliar } from "@preparados/datos";
 import {
+  aprobarCuestionario,
   type Catalogo,
+  CONFIG_POR_DEFECTO,
+  type Correccion,
+  declararLogro,
+  type DominioId,
+  type ErrorDeclaracion,
   type EstadoUsuario,
   type FechaISO,
   type Indice,
   indexar,
+  type LogroId,
+  type MetodoVerificacion,
   type Resumen,
   resumir,
 } from "@preparados/dominio";
@@ -28,6 +36,11 @@ export type EstadoApp =
       avisos: string[];
     };
 
+/** Lo que devuelve una acción sobre un logro, listo para que la pantalla muestre qué pasó. */
+export type ResultadoAccion =
+  | { ok: true; subioNivel: { dominio: DominioId; nivel: number } | null; correccion?: Correccion }
+  | { ok: false; error: ErrorDeclaracion | "sin_perfil"; correccion?: Correccion };
+
 export interface Dependencias {
   almacen: Almacen;
   cargarCatalogo: () => Promise<Catalogo>;
@@ -42,6 +55,10 @@ export interface Tienda {
   iniciar: () => Promise<void>;
   /** Persiste un estado nuevo del usuario y recalcula el resumen. */
   guardar: (estado: EstadoUsuario) => Promise<void>;
+  /** "Lo sé hacer": registra el logro con autodeclaración (la mitad del XP). */
+  declarar: (logro: LogroId, metodo: Exclude<MetodoVerificacion, "cuestionario">) => Promise<ResultadoAccion>;
+  /** Corrige el cuestionario y, si aprueba, registra el logro con el XP completo. */
+  responderCuestionario: (logro: LogroId, respuestas: number[]) => Promise<ResultadoAccion>;
   /** Vuelve a calcular el resumen con la fecha de hoy. */
   recalcular: () => void;
 }
@@ -95,6 +112,55 @@ export function crearTienda(deps: Dependencias): Tienda {
     emitir(componer(actual.catalogo, actual.idx, guardado, actual.avisos));
   };
 
+  /**
+   * Corre una acción del dominio sobre el estado guardado, la persiste si salió bien
+   * y avisa si el dominio subió de nivel.
+   */
+  const aplicar = async (
+    logro: LogroId,
+    accion: (idx: Indice, estado: EstadoUsuario, fecha: FechaISO) => {
+      ok: boolean;
+      estado?: EstadoUsuario;
+      error?: ErrorDeclaracion;
+      correccion?: Correccion;
+    },
+  ): Promise<ResultadoAccion> => {
+    const actual = estado;
+    if (actual.fase !== "listo") throw new Error("la app todavía no terminó de cargar");
+    const base = actual.guardado?.estado;
+    if (!base) return { ok: false, error: "sin_perfil" };
+
+    const fecha = hoy();
+    const r = accion(actual.idx, base, fecha);
+    if (!r.ok || !r.estado) {
+      return { ok: false, error: r.error ?? "logro_inexistente", ...(r.correccion && { correccion: r.correccion }) };
+    }
+
+    const dominio = actual.idx.logros.get(logro)?.dominio;
+    const nivelAntes = dominio ? (actual.resumen?.niveles.get(dominio)?.nivel ?? 0) : 0;
+
+    const guardado = nuevoGuardado(r.estado, actual.catalogo.version);
+    await deps.almacen.guardar(guardado);
+    const nuevo = componer(actual.catalogo, actual.idx, guardado, actual.avisos);
+    emitir(nuevo);
+
+    const nivelDespues =
+      dominio && nuevo.fase === "listo" ? (nuevo.resumen?.niveles.get(dominio)?.nivel ?? 0) : nivelAntes;
+    return {
+      ok: true,
+      subioNivel: dominio && nivelDespues > nivelAntes ? { dominio, nivel: nivelDespues } : null,
+      ...(r.correccion && { correccion: r.correccion }),
+    };
+  };
+
+  const declarar = (logro: LogroId, metodo: Exclude<MetodoVerificacion, "cuestionario">) =>
+    aplicar(logro, (idx, base, fecha) => declararLogro(idx, base, logro, metodo, fecha, fecha, CONFIG_POR_DEFECTO));
+
+  const responderCuestionario = (logro: LogroId, respuestas: number[]) =>
+    aplicar(logro, (idx, base, fecha) =>
+      aprobarCuestionario(idx, base, logro, respuestas, fecha, fecha, CONFIG_POR_DEFECTO),
+    );
+
   const recalcular = () => {
     const actual = estado;
     if (actual.fase !== "listo") return;
@@ -109,6 +175,8 @@ export function crearTienda(deps: Dependencias): Tienda {
     },
     iniciar,
     guardar,
+    declarar,
+    responderCuestionario,
     recalcular,
   };
 }
