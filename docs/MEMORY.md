@@ -16,8 +16,10 @@ Estado actual, decisiones tomadas en el camino y bitácora. La actualiza quien t
 - Aprendé andando: filtro por dominio, detalle con Markdown propio o video de YouTube, y links de ida y vuelta con los logros.
 - Inicio andando: % de preparación por escenario, nivel y XP por dominio, tres recomendaciones y los vencimientos.
 - Perfil completo: editar entorno, vivienda, clima y escenarios, tema, exportar e importar respaldo con confirmación, y borrar todo con doble confirmación.
-- Hechas las órdenes 0 a 12 de `docs/ordenes-claude-code.md`. El MVP está completo y revisado; los problemas encontrados están en `docs/revision-mvp.md`, sin corregir.
-- Próximo paso: decidir qué se corrige de esa lista. Las órdenes 13 y 14 (publicar en GitHub y Pages) necesitan decisiones del autor (licencia, OK para el push).
+- Hechas las órdenes 0 a 14 de `docs/ordenes-claude-code.md`. El MVP está completo y revisado; los problemas encontrados están en `docs/revision-mvp.md`, sin corregir.
+- Licencias puestas: MIT para el código, CC BY-SA 4.0 para `contenido/`. Las imágenes de referencia de tipografías salieron del repo (quedan en el disco).
+- Listo para publicar, pero **sin push**: falta crear el repo en GitHub, agregar el remoto y que el autor dé el OK. En GitHub hay que poner Settings → Pages → Source: GitHub Actions.
+- Próximo paso: decidir qué se corrige de `docs/revision-mvp.md` y cargar el contenido real.
 
 ## Decisiones provisorias (pendientes de confirmar por el autor)
 
@@ -57,6 +59,7 @@ Formato: `- AAAA-MM-DD · quién · qué se hizo / decidió`.
 - 2026-11-18 · claude-code · Orden 3: creado `packages/app` (Vite + React + vite-plugin-pwa). Decidido: el catálogo se copia a `public/catalogo.json` antes de `dev` y `build` y se lee con fetch (no se empaqueta en el JS); navegación con hash propia en vez de router; la tienda reconcilia el guardado cuando cambió la versión del catálogo. Los iconos provisorios se generan con un script.
 - 2026-11-18 · autor · Tipografías elegidas: Rye para los títulos y Bitter para el texto. Opciones comparadas en https://claude.ai/code/artifact/a14067af-5e21-4928-b456-e8ca9fb0cb71
 - 2026-11-18 · claude-code · Orden 4: tema en un solo archivo (`src/tema.css`), modo claro beige militar y oscuro negro y gris, con conmutador en Perfil (preferencia del dispositivo en localStorage, no va al respaldo) y página `#/tema` solo en desarrollo. Un test verifica 4,5:1 de contraste en los dos modos.
+- 2026-11-18 · claude-code · Órdenes 13 y 14: README de la raíz, revisión de secretos (limpio), LICENSE MIT y `contenido/LICENSE` CC BY-SA 4.0, y el workflow de GitHub Pages. Decidido con el autor: las imágenes promocionales de Kanaboy y Virginia salen del repo. La ruta base sale de `VITE_BASE` (local `/`, Pages `/preparados.app/`), de donde salen también el manifest y el service worker. Sin push.
 - 2026-11-18 · claude-code · Orden 12: revisión del MVP. Tests (114), typecheck y build en verde; Lighthouse local 100/100/100/91 en escritorio y 98/100/100/91 en móvil. Los 13 problemas encontrados quedaron en `docs/revision-mvp.md` sin tocar nada, como pedía la orden. Falta el recorrido en el celular y la prueba sin conexión real.
 - 2026-11-18 · claude-code · Orden 11: Perfil con edición del perfil, respaldo y borrado. Decidido: los cambios del perfil se guardan al toque (sin botón de confirmar); la importación muestra fecha, cuántos logros e items trae y los avisos antes de reemplazar; el borrado pide una segunda confirmación en la misma pantalla; `pedirAlmacenamientoPersistente` se llama desde la tienda cuando se registra el primer logro.
 - 2026-11-18 · claude-code · Orden 10: pantalla Inicio, toda con `resumir()`. Cuatro tarjetas cortas (preparación, dominios, recomendaciones, vencimientos) con barras accesibles (`role="progressbar"`); la tarjeta de vencimientos solo aparece si hay algo por vencer.

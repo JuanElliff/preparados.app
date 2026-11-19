@@ -2,7 +2,14 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+/**
+ * Ruta desde la que se sirve la app. En local es la raíz; en GitHub Pages, el nombre del repo.
+ * El workflow de Pages la pasa como VITE_BASE=/preparados.app/.
+ */
+const base = process.env.VITE_BASE ?? "/";
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -14,22 +21,24 @@ export default defineConfig({
         description: "Preparación y autosuficiencia, paso a paso. Tus datos quedan en tu dispositivo.",
         lang: "es",
         dir: "ltr",
-        start_url: "/",
-        scope: "/",
+        id: base,
+        start_url: base,
+        scope: base,
         display: "standalone",
         orientation: "portrait",
         background_color: "#0e0e0d",
         theme_color: "#0e0e0d",
+        // Relativos al manifest: así sirven igual en la raíz o dentro de /preparados.app/.
         icons: [
-          { src: "/icono-192.png", sizes: "192x192", type: "image/png" },
-          { src: "/icono-512.png", sizes: "512x512", type: "image/png" },
-          { src: "/icono-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+          { src: "icono-192.png", sizes: "192x192", type: "image/png" },
+          { src: "icono-512.png", sizes: "512x512", type: "image/png" },
+          { src: "icono-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
       workbox: {
         // El catálogo entra acá: sin él la app no puede mostrar nada sin conexión.
         globPatterns: ["**/*.{js,css,html,png,svg,webmanifest,json,woff2}"],
-        navigateFallback: "index.html",
+        navigateFallback: `${base}index.html`,
       },
     }),
   ],

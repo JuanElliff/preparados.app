@@ -27,6 +27,25 @@ npm test -w @preparados/app           # vitest + @testing-library/react
   negro y gris, modo claro beige militar; sigue al sistema salvo que se elija uno en Perfil. En desarrollo,
   `#/tema` muestra el sistema visual completo.
 
+## Dónde se publica
+
+`.github/workflows/pages.yml` publica la app en GitHub Pages en cada push a `main`:
+instala, corre los tests y el typecheck, compila el catálogo y hace el build. Si algo falla,
+no publica y queda la versión anterior.
+
+La ruta desde la que se sirve la app sale de `VITE_BASE` (por defecto `/`). El workflow la
+fija en `/preparados.app/`, que es lo que necesita GitHub Pages, y de ahí salen también el
+`start_url` y el `scope` del manifest y el fallback del service worker. Para ver ese build
+igual que en Pages:
+
+```bash
+VITE_BASE=/preparados.app/ npm run build -w @preparados/app
+npx vite preview --base /preparados.app/   # desde packages/app
+```
+
+Las pantallas se direccionan con hash (`#/camino`), así que recargar cualquiera funciona en
+Pages sin configuración extra del servidor.
+
 ## Probarla en el celular, en la red local
 
 1. En la compu: `npm run dev -w @preparados/app`. Vite escucha en toda la red (`server.host`) y muestra
