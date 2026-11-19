@@ -458,6 +458,14 @@ p {
   background: none;
 }
 
+.archivo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Medidas: preparación por escenario y XP por dominio */
 
 .medida {

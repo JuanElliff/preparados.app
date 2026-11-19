@@ -1,4 +1,10 @@
-import { type Almacen, type Guardado, nuevoGuardado, reconciliar } from "@preparados/datos";
+import {
+  type Almacen,
+  type Guardado,
+  nuevoGuardado,
+  pedirAlmacenamientoPersistente,
+  reconciliar,
+} from "@preparados/datos";
 import {
   aprobarCuestionario,
   type Catalogo,
@@ -61,6 +67,10 @@ export interface Tienda {
   declarar: (logro: LogroId, metodo: Exclude<MetodoVerificacion, "cuestionario">) => Promise<ResultadoAccion>;
   /** Corrige el cuestionario y, si aprueba, registra el logro con el XP completo. */
   responderCuestionario: (logro: LogroId, respuestas: number[]) => Promise<ResultadoAccion>;
+  /** Reemplaza todo lo guardado. Lo usa la importación de un respaldo. */
+  reemplazar: (guardado: Guardado) => Promise<void>;
+  /** Borra los datos del dispositivo y vuelve a la bienvenida. */
+  borrarTodo: () => Promise<void>;
   /** Vuelve a calcular el resumen con la fecha de hoy. */
   recalcular: () => void;
 }
@@ -139,6 +149,9 @@ export function crearTienda(deps: Dependencias): Tienda {
       return { ok: false, error: r.error ?? "logro_inexistente", ...(r.correccion && { correccion: r.correccion }) };
     }
 
+    // Con el primer logro ya hay algo que perder: se le pide al navegador que no lo borre.
+    if (base.logros.length === 0 && r.estado.logros.length > 0) void pedirAlmacenamientoPersistente();
+
     const dominio = actual.idx.logros.get(logro)?.dominio;
     const nivelAntes = dominio ? (actual.resumen?.niveles.get(dominio)?.nivel ?? 0) : 0;
 
@@ -164,6 +177,20 @@ export function crearTienda(deps: Dependencias): Tienda {
       aprobarCuestionario(idx, base, logro, respuestas, fecha, fecha, CONFIG_POR_DEFECTO),
     );
 
+  const reemplazar = async (guardado: Guardado) => {
+    const actual = estado;
+    if (actual.fase !== "listo") throw new Error("la app todavía no terminó de cargar");
+    await deps.almacen.guardar(guardado);
+    emitir(componer(actual.catalogo, actual.idx, guardado, []));
+  };
+
+  const borrarTodo = async () => {
+    const actual = estado;
+    if (actual.fase !== "listo") throw new Error("la app todavía no terminó de cargar");
+    await deps.almacen.borrar();
+    emitir(componer(actual.catalogo, actual.idx, null, []));
+  };
+
   const recalcular = () => {
     const actual = estado;
     if (actual.fase !== "listo") return;
@@ -180,6 +207,8 @@ export function crearTienda(deps: Dependencias): Tienda {
     guardar,
     declarar,
     responderCuestionario,
+    reemplazar,
+    borrarTodo,
     recalcular,
   };
 }
