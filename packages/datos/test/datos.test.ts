@@ -60,9 +60,32 @@ describe("respaldo", () => {
     const r = importarRespaldo(exportarRespaldo(nuevoGuardado(viejo, "x", AHORA)), idx);
     if (!r.ok) throw new Error(r.error);
     expect(r.guardado.estado.perfil.escenarios).toEqual(["corte-servicios"]);
-    expect(r.guardado.estado.logros).toEqual([{ logro: "agua-potabilizar", metodo: "autodeclaracion", fecha: "2026-11-01" }]);
+    expect(r.guardado.estado.logros).toEqual([{ logro: "agua-potabilizar", metodo: "cuestionario", fecha: "2026-11-02" }]);
     expect(r.guardado.estado.inventario).toEqual([]);
     expect(r.avisos).toHaveLength(6);
+  });
+
+  it("ante duplicados queda el de mejor verificación; a igual verificación, el más antiguo", () => {
+    const conDuplicados: EstadoUsuario = {
+      perfil: { entorno: "ciudad", escenarios: [] },
+      logros: [
+        { logro: "agua-potabilizar", metodo: "autodeclaracion", fecha: "2026-11-05" },
+        { logro: "agua-potabilizar", metodo: "cuestionario", fecha: "2026-11-10" },
+        { logro: "salud-conocimiento-1", metodo: "cuestionario", fecha: "2026-11-09" },
+        { logro: "salud-conocimiento-1", metodo: "cuestionario", fecha: "2026-11-03" },
+      ],
+      inventario: [],
+    };
+    const r = reconciliar(conDuplicados, idx);
+    if ("error" in r) throw new Error(r.error);
+    expect(r.estado.logros).toEqual([
+      { logro: "agua-potabilizar", metodo: "cuestionario", fecha: "2026-11-10" },
+      { logro: "salud-conocimiento-1", metodo: "cuestionario", fecha: "2026-11-03" },
+    ]);
+    expect(r.avisos).toEqual([
+      "logro descartado: agua-potabilizar (registro duplicado autodeclaracion del 2026-11-05; queda cuestionario del 2026-11-10)",
+      "logro descartado: salud-conocimiento-1 (registro duplicado cuestionario del 2026-11-09; queda cuestionario del 2026-11-03)",
+    ]);
   });
 
   it("falla si el entorno ya no existe", () => {
